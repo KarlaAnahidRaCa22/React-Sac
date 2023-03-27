@@ -34,7 +34,7 @@ export default function CrearCotizacion(){
 */
     return(
         <>
-            <h1>Cotizaciones</h1>
+            <h1>Cotizaciones 3</h1>
            {/*<MostrarErrores errores={errores} />
             {cargado ? <FormularioCotizacion
             
