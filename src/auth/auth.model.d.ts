@@ -17,3 +17,4 @@ export interface usuarioDTO{
     id: string;
     email: string;
 }
+

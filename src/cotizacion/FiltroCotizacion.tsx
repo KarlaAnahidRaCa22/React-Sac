@@ -12,8 +12,7 @@ export default function FiltroCotizacion(){
     
     const valorInicial: filtroCotizacionForm = {
         nombre: '',
-        proximosEstrenos: false,
-        enCines: false,
+        enviarCotEmail: false,
         pagina: 1,
         recordsPorPagina: 10
     }
@@ -112,17 +111,12 @@ export default function FiltroCotizacion(){
                             </div>
                             
                             <div className="form-group mx-sm-3 mb-2">
-                                <Field className="form-check-input" id="proximosEstrenos"
-                                    name="proximosEstrenos" type="checkbox" />
+                                <Field className="form-check-input" id="enviarCotEmail"
+                                    name="enviarCotEmail" type="checkbox" />
                                     <label className="form-check-label"
-                                    htmlFor="proximosEstrenos">Próximos Estrenos</label>
+                                    htmlFor="enviarCotEmail">Enviar cotización por correo electrónico</label>
                             </div>
-                            <div className="form-group mx-sm-3 mb-2">
-                                <Field className="form-check-input" id="enCines"
-                                    name="enCines" type="checkbox" />
-                                <label className="form-check-label"
-                                    htmlFor="enCines">En Cines</label>
-                            </div>
+                            
                             <Button
                                 className="btn btn-primary mb-2 mx-sm-3"
                                 onClick={() => formikProps.submitForm()}
@@ -155,8 +149,7 @@ export default function FiltroCotizacion(){
 
 interface filtroCotizacionForm {
     nombre: string;
-    proximosEstrenos: boolean;
-    enCines: boolean;
+    enviarCotEmail: boolean;
     pagina: number;
     recordsPorPagina: number;
 }

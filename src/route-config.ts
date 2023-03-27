@@ -6,13 +6,18 @@ import EditarCotizacion from "./cotizacion/EditarCotizacion";
 import FiltroCotizacion from "./cotizacion/FiltroCotizacion";
 import DetalleCotizacion from "./cotizacion/DetalleCotizacion";
 
+
+
+
 import RedireccionarALanding from "./utils/RedireccionarALanding";
 import Registro from "./auth/Registro";
 //import Login from "./Login";
 import Menu from "./Menu/Menu";
 import Inicio from "./utils/inicio";
 
-import IndiceUsuarios from "./auth/IndiceUsuarios";
+import IndiceUsuario from "./auth/IndiceUsuario";
+import IndiceEmpresa from "./empresa/IndiceEmpresa";
+import IndiceEmpresaUsuario from "./empresa/IndiceEmpresaUsuario";
 import Autorizado from "./auth/Autorizado";
 
 const rutas = [
@@ -23,10 +28,13 @@ const rutas = [
     {path: '/cotizacion/editar/:id(\\d+)', componente: EditarCotizacion, esAdmin:true},
     {path: '/cotizacion/filtro', componente: FiltroCotizacion},
 
+    
     {path: '/registro', componente: Registro},
     //{path: '/login', componente: Login},
     {path: '/menu', componente: Menu},
-    {path: '/usuarios', componente: IndiceUsuarios},
+    {path: '/usuario', componente: IndiceUsuario},
+    {path: '/empresa', componente: IndiceEmpresa},
+    {path: '/empresaUsuario', componente: IndiceEmpresaUsuario},
 
     {path: '/', componente: LandingPage, exact: true},
     {path: '*', componente: RedireccionarALanding}

@@ -54,4 +54,5 @@ interface selectorMultipleProps{
 export interface selectorMultipleModel{
     llave: number;
     valor: string;
+    key: string
 }

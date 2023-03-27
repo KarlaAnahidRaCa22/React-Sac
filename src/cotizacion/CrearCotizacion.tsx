@@ -1,16 +1,18 @@
 import axios, { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
+import { NavLink, useHistory } from "react-router-dom";
 import Cargando from "../utils/Cargando";
 import { urlCotizacion } from "../utils/endpoints";
 import { convertirCotizacionAFormData } from "../utils/formDataUtils";
 import { MostrarErrores } from "../utils/MostrarErrores";
 import FormularioCotizacion from "./FormularioCotizacion";
 import { cotizacionCreacionDTO } from "./cotizacion.model";
+import FiltroCotizacion from "./FiltroCotizacion";
 
 export default function CrearCotizacion(){
-/*
-    const [cargado, setCargado] = useState(false);
+
+
+   // const [cargado, setCargado] = useState(false);
     const history = useHistory();
     const [errores, setErrores] = useState<string[]>([]);
 
@@ -31,16 +33,18 @@ export default function CrearCotizacion(){
             setErrores(error.response.data);
         }
     }
-*/
+
     return(
         <>
-            <h1>Cotizaciones 3</h1>
-           {/*<MostrarErrores errores={errores} />
-            {cargado ? <FormularioCotizacion
+            <h1>Cotizaciones</h1>
+           <MostrarErrores errores={errores} />
+           <FiltroCotizacion />
+           
+           {/* {cargado ? */}
+            <FormularioCotizacion
+                
+            /> {/*: <Cargando /> */}
             
-                modelo={{nombre: '', enCines: false, trailer: ''}}
-                onSubmit={async valores => crear(valores)}
-            /> : <Cargando />}*/}
             </>  
     )
 }

@@ -3,8 +3,6 @@ export interface cotizacionDTO{
     id: number;
     nombre: string;
     poster: string;
-    enCines: boolean;
-    trailer: string;
     resumen?: string;
     fechaLanzamiento: Date;
     
@@ -12,8 +10,6 @@ export interface cotizacionDTO{
 
 export interface cotizacionCreacionDTO{
     nombre: string;
-    enCines: boolean;
-    trailer: string;
     resumen?: string;
     fechaLanzamiento?: Date;
     poster?: File;
@@ -22,7 +18,6 @@ export interface cotizacionCreacionDTO{
 }
 
 export interface landingPageDTO {
-    enCines?: cotizacion[];
     proximosEstrenos?: cotizacion[];
 }
 

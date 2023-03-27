@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useHistory } from "react-router-dom";
 import AutenticacionContext from "../auth/AutenticacionContext";
 import Autorizado from "../auth/Autorizado";
 import { logout } from "../auth/manejadorJWT";
@@ -9,6 +9,7 @@ import RedireccionarALanding from "./RedireccionarALanding";
 
 export default function Menu(){
     const claseActiva = "active";
+    const history = useHistory();
     const {actualizar, claims} = useContext(AutenticacionContext);
 
     function obtenerNombreUsuario(): string {
@@ -51,8 +52,8 @@ export default function Menu(){
                                 </li>
                                 <li className="nav-item">
                                     <NavLink className="nav-link" activeClassName={claseActiva} 
-                                    to="/usuarios">
-                                        Usuarios
+                                    to="/usuario">
+                                        Usuario
                                     </NavLink>
                                 </li>
                                 <li className="nav-item">
@@ -64,14 +65,14 @@ export default function Menu(){
                                         {/*<NavLink className="nav-link" activeClassName={claseActiva}
                                     to="/Menu">
                                         Menu
-                                    </NavLink>*/}
+                                    </NavLink>
                                     
                                         <li className="nav-item">
                                         <NavLink className="nav-link" activeClassName={claseActiva} 
                                         to="/cotizacion/crear">
                                             Crear Cotizacion
                                         </NavLink>
-                            </li>
+                            </li>*/}
                                 
                                 </>}/>
                                 <Autorizado
@@ -103,7 +104,8 @@ export default function Menu(){
                                     logout();
                                     actualizar([]);
                                 }}
-                                className="nav-link btn btn-link">Log out</Button>
+                                className="nav-link btn btn-link">Cerrar Sesión</Button>
+                                
                                 
                             </>}
                             noAutorizado={<>

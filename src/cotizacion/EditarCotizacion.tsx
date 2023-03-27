@@ -21,8 +21,6 @@ export default function EditarCotizacion(){
             .then((respuesta: AxiosResponse<cotizacionPutGetDTO>) => {
                 const modelo: cotizacionCreacionDTO = {
                     nombre: respuesta.data.cotizacion.nombre,
-                    enCines: respuesta.data.cotizacion.enCines,
-                    trailer: respuesta.data.cotizacion.trailer,
                     posterURL: respuesta.data.cotizacion.poster,
                     resumen: respuesta.data.cotizacion.resumen,
                     fechaLanzamiento: new Date(respuesta.data.cotizacion.fechaLanzamiento)
@@ -54,9 +52,6 @@ export default function EditarCotizacion(){
             <h3>Editar Cotización</h3>
             <MostrarErrores errores={errores} />
             {cotizacion && cotizacionPutGet ? <FormularioCotizacion 
-                
-                    modelo={cotizacion}
-                    onSubmit={async valores => await editar(valores)}
             /> : <Cargando />}
             
         </>

@@ -37,10 +37,10 @@ function App() {
           <Switch>
             {rutas.map(ruta => 
               <Route key={ruta.path} path={ruta.path}
-                exact={ruta.exact}>
-                  {ruta.esAdmin && !esAdmin() ? <>
+                exact={ruta.exact}><ruta.componente />
+                 {/* {ruta.esAdmin && !esAdmin() ? <>
                     No tiene permiso para acceder a este componente
-                  </> : <ruta.componente />}
+                  </> */} 
               </Route>)}
           </Switch>
             </div>

@@ -2,21 +2,21 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import Button from "../utils/Button";
 import confirmar from "../utils/Confirmar";
-import { urlCuentas } from "../utils/endpoints";
+import { urlEmpresa } from "../utils/endpoints";
 import IndiceEntidad from "../utils/IndiceEntidad";
-import { usuarioDTO } from "./auth.model";
+import { empresaDTO } from "./empresaUsuario.model";
 
-export default function IndiceUsuarios() {
+export default function IndiceEmpresa() {
 
-    async function hacerAdmin(id:string){
-        await editarAdmin(`${urlCuentas}/hacerAdmin`, id);
+    async function hacerAdmin(id:number){
+        await editarAdmin(`${urlEmpresa}/hacerAdmin`, id);
     }
 
-    async function removerAdmin(id:string) {
-        await editarAdmin(`${urlCuentas}/removerAdmin`, id);
+    async function removerAdmin(id:number) {
+        await editarAdmin(`${urlEmpresa}/removerAdmin`, id);
     }
     
-    async function editarAdmin(url: string, id: string) {
+    async function editarAdmin(url: string, id: number) {
         await axios.post(url, JSON.stringify(id), 
             {
                 headers: {'Content-Type': 'application/json'}
@@ -31,11 +31,11 @@ export default function IndiceUsuarios() {
     }
 
     return (
-        <IndiceEntidad<usuarioDTO> 
-            url={`${urlCuentas}/listadoUsuarios`}
-            titulo="Usuarios"
+        <IndiceEntidad<empresaDTO> 
+            url={`${urlEmpresa}/listadoEmpresa`}
+            titulo="Empresa"
         >
-            {usuarios => <>
+            {empresa => <>
                 <thead>
                     <tr>
                         <th></th>
@@ -43,19 +43,19 @@ export default function IndiceUsuarios() {
                     </tr>
                 </thead>
                 <tbody>
-                    {usuarios?.map(usuario => <tr key={usuario.id}>
+                    {empresa?.map(empresa => <tr key={empresa.id}>
                         <td>
                             <Button 
-                                onClick={() => confirmar(() => hacerAdmin(usuario.id), 
-                                            `¿Desea hacer a ${usuario.email} admin?`, 'Realizar')}>
+                                onClick={() => confirmar(() => hacerAdmin(empresa.id), 
+                                            `¿Desea hacer a ${empresa.username} admin?`, 'Realizar')}>
                                     Hacer Admin</Button>
                             <Button className="btn btn-danger" style={{ marginLeft: '1rem' }} 
-                                onClick={() => confirmar(() => removerAdmin(usuario.id), 
-                                            `¿Desea remover a ${usuario.email} como admin?`, 'Realizar')}>
+                                onClick={() => confirmar(() => removerAdmin(empresa.id), 
+                                            `¿Desea remover a ${empresa.username} como admin?`, 'Realizar')}>
                                     Remover Admin</Button>
                         </td>
                         <td>
-                            {usuario.email}
+                            {empresa.username}
                         </td>
                     </tr>)}
                 </tbody>

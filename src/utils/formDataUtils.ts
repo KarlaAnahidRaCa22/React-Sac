@@ -11,8 +11,7 @@ export function convertirCotizacionAFormData(cotizacion: cotizacionCreacionDTO):
         formData.append('resumen', cotizacion.resumen);
     }
 
-    formData.append('trailer', cotizacion.trailer);
-    formData.append('enCines', String(cotizacion.enCines));
+    
     if (cotizacion.fechaLanzamiento){
         formData.append("fechaLanzamiento", formatearFecha(cotizacion.fechaLanzamiento));
     }

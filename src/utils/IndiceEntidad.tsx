@@ -40,6 +40,8 @@ export default function IndiceEntidad<T>(props: indiceEntidadProps<T>){
         }
     }
 
+    
+
     const botones = (urlEditar: string, id: number) => <>
         <Link className="btn btn-success" to={urlEditar}>Editar</Link>
         <Button 
