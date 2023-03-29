@@ -32,6 +32,10 @@ export default function SelectorMultiple(props: selectorMultipleProps){
                 {props.noSeleccionados.map(item => 
                     <li key={item.llave} onClick={() => seleccionar(item)}>{item.valor}</li>)}
             </ul>
+            <ul>
+                {props.noSeleccionados.map(item => 
+                    <li key={item.key} onClick={() => seleccionar(item)}>{item.email}</li>)}
+            </ul>
             <div className="selector-multiple-botones">
                 <button type="button" onClick={seleccionarTodo}>{'>>'}</button>
                 <button type="button" onClick={deseleccionarTodo}>{'<<'}</button>
@@ -39,6 +43,10 @@ export default function SelectorMultiple(props: selectorMultipleProps){
             <ul>
                 {props.seleccionados.map(item =>
                     <li key={item.llave} onClick={() => deseleccionar(item)}>{item.valor}</li>)}
+            </ul>
+            <ul>
+                {props.seleccionados.map(item => 
+                    <li key={item.key} onClick={() => deseleccionar(item)}>{item.email}</li>)}
             </ul>
         </div>
     )
@@ -52,7 +60,8 @@ interface selectorMultipleProps{
 }
 
 export interface selectorMultipleModel{
-    llave: number;
-    valor: string;
-    key: string
+    llave?: number;
+    valor?: string;
+    key?: string
+    email?: string;
 }

@@ -1,3 +1,5 @@
+import { usuarioDTO } from "../auth/auth.model";
+
 export interface empresaDTO {
     id: number;
     nombre: string;
@@ -8,12 +10,16 @@ export interface empresaDTO {
 
 export interface empresaUsuario{
     EmpresaId: number;
-    IdUsuario: string;
+    UsuarioId: string;
 }
 
 export interface empresaUsuarioCreacionDTO{
-    id: number;
-    username: string;
-    empresaId: number;
-    idUsuario: string;
+
+    empresaId?: number;
+    usuarioId?: string;
+}
+
+export interface empresaUsuarioPostGetDTO{
+    empresa: empresaDTO[];
+    usuario: usuarioDTO[];
 }

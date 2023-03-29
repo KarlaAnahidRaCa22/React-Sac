@@ -74,7 +74,7 @@ export default function LandingPage(){
                         
                 </div>
                 <br/>
-                <footer>El contenido del pie de página</footer>
+                
             </AlertaContext.Provider>
             
         </>

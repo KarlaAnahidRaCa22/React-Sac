@@ -1,54 +1,56 @@
 import axios, { AxiosResponse } from "axios";
-import { Form, Formik, FormikHelpers } from "formik";
-import { useEffect, useState } from "react";
+import { Form, Formik, FormikHelpers, FormikProps } from "formik";
+import { ChangeEvent, useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { usuarioDTO } from "../auth/auth.model";
 import Button from "../utils/Button";
 import { urlCuentas, urlEmpresa, urlEmpresaUsuario } from "../utils/endpoints";
+import FormGroupMarkdown from "../utils/FormGroupMarkdown";
 import FormGroupText from "../utils/FormGroupText";
 import { selectorMultipleModel } from "../utils/SelectorMultiple";
-import { empresaDTO, empresaUsuarioCreacionDTO } from "./empresaUsuario.model";
+import { empresaDTO, empresaUsuario, empresaUsuarioCreacionDTO } from "./empresaUsuario.model";
 
-export default function FormularioEmpresaUsuario(){
+export default function FormularioEmpresaUsuario(props: formularioEmpresaUsuarioProps){
 
-    const history = useHistory();
-    const [errores, setErrores] = useState<string[]>([]);
-
-    async function crear(empresaUsuario:empresaUsuarioCreacionDTO) {
-        try{
-            await axios.post(urlEmpresaUsuario, empresaUsuario);
-            history.push('/empresaUsuario')
-        }
-        catch (error){
-            setErrores(error.response.data);
-        }
-    }
-    const valorInicial: formularioEmpresaUsuarioForm = {
-        empresaId: 0,
-        usuarioId: ''
-    }
+  {/* const valorInicial: formularioEmpresaUsuarioProps = {
+        modelo = {props.modelo},
+        onSubmit = {props.onSubmit},
+       empresaId: 0,
+       UsuarioId: '',
+       
+   } */}
 
     const [empresa, setEmpresa] = useState<empresaDTO[]>([]);
     const [usuario, setUsuario] = useState<usuarioDTO[]>([]);
+    
+    const seleccionoUsuario = (e: any, formikProps: FormikProps<empresaUsuarioCreacionDTO>) => {
+        console.log(e.target.value)
+        console.log(formikProps)
+        formikProps.setFieldValue("usuarioId", e.target.value)
+    }
     
     useEffect(() => {
         axios.get(`${urlEmpresa}/todos`)
         .then((respuesta: AxiosResponse<empresaDTO[]>) => {
             setEmpresa(respuesta.data);
         })
-    }, [])
-    useEffect(() => {
         axios.get(`${urlCuentas}/todos`)
         .then((respuesta: AxiosResponse<usuarioDTO[]>) => {
             setUsuario(respuesta.data);
         })
     }, [])
+    
+    function seleccionoEmpresa(e: any, formikProps: FormikProps<empresaUsuarioCreacionDTO>) {
+        console.log(e.target.value)
+        console.log(formikProps)
+        formikProps.setFieldValue("empresaId", e.target.value)
+    }
+
     return (
         <>
-            <h1>Empresa Usuario</h1>
-
-            <Formik initialValues={valorInicial}
-                onSubmit={valores => console.log(valores)}
+            
+            <Formik initialValues={props.modelo}
+                onSubmit={props.onSubmit}
             >
                 {(formikProps) => (
                     <Form>
@@ -59,7 +61,7 @@ export default function FormularioEmpresaUsuario(){
                                 <h2>Empresa:</h2>
                                 
                                 <select className="form-control"
-                                    {...formikProps.getFieldProps('empresaId')}
+                                    onChange={(e) => {seleccionoEmpresa(e, formikProps)}}
                                 >
                                     <option value="0">--Seleccione una empresa--</option>
                                     {empresa.map(empresa => <option key={empresa.id}
@@ -67,14 +69,14 @@ export default function FormularioEmpresaUsuario(){
                                 </select>
                             </div>
                             <br />
-                            <Button disabled={formikProps.isSubmitting} type="submit" >Conectar</Button>
-                            <Link className="btn btn-secondary" to="/" >Cancelar</Link>
+                            <Button disabled={formikProps.isSubmitting} type="submit" >Conectar</Button>{"      "}
+                            <Link className="btn btn-danger" to="/" >Cancelar</Link>
                             <br />
                             <br />
                             <div className="form-group mx-sm-3 mb-2">
                                 <h2>Usuario:</h2>
                                 <select className="form-control"
-                                    {...formikProps.getFieldProps('usuarioId')}
+                                    onChange={(e) => {seleccionoUsuario(e, formikProps)}}
                                 >
                                     <option value="0">--Seleccione un usuario--</option>
                                     {usuario.map(usuario => <option key={usuario.id}
@@ -85,14 +87,18 @@ export default function FormularioEmpresaUsuario(){
                     </Form>
                 )}
 
-            </Formik>
+                                    </Formik>
             
             
         </>
     ) 
                     }
 
-interface formularioEmpresaUsuarioForm{
+interface formularioEmpresaUsuarioProps{
+    modelo: empresaUsuarioCreacionDTO;
+    onSubmit(valores: empresaUsuarioCreacionDTO, acciones: FormikHelpers<empresaUsuarioCreacionDTO>): void;
     empresaId: number;
-    usuarioId: string;
+    UsuarioId: string;
+
+   
 }

@@ -1,4 +1,5 @@
 import { cotizacionCreacionDTO } from "../cotizacion/cotizacion.model";
+import { empresaUsuarioCreacionDTO } from "../empresa/empresaUsuario.model";
 
 
 
@@ -23,6 +24,15 @@ export function convertirCotizacionAFormData(cotizacion: cotizacionCreacionDTO):
     
 
 
+
+    return formData;
+}
+
+export function convertirEmpresaUsuarioAFormData(empresaUsuario: empresaUsuarioCreacionDTO): FormData {
+    const formData = new FormData();
+
+    formData.append("empresaId", JSON.stringify(empresaUsuario.empresaId));
+    formData.append("usuarioId", JSON.stringify(empresaUsuario.usuarioId));
 
     return formData;
 }
