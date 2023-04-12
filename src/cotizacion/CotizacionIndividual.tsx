@@ -1,6 +1,6 @@
 import { cotizacionDTO } from "./cotizacion.model";
 import css from './CotizacionIndividual.module.css'
-import Button from "../utils/Button";
+import Boton from "../utils/Boton";
 import confirmar from "../utils/Confirmar";
 import axios from "axios";
 import { urlCotizacion } from "../utils/endpoints";
@@ -28,9 +28,6 @@ export default function CotizacionIndividual(props: CotizacionIndividualProps){
 
     return (
         <div className={css.div}>
-            <Link to={construirLink()} onClick={() => MostrarLink()}>
-                <img src={props.cotizacion.poster} alt="Poster" />
-            </Link>
             <p>
                 <Link to={construirLink()}>{props.cotizacion.nombre}</Link>
             </p>
@@ -39,9 +36,9 @@ export default function CotizacionIndividual(props: CotizacionIndividualProps){
                     <div>
                         <Link style={{marginRight: '1rem'}} className="btn btn-info"
                             to={`/cotizacion/editar/${props.cotizacion.id}`}>Editar</Link>
-                        <Button
+                        <Boton
                             onClick={() => confirmar(() => borrarCotizacion())}
-                            className="btn btn-danger">Borrar</Button>
+                            className="btn btn-danger">Borrar</Boton>
                     </div>
                 }
             />

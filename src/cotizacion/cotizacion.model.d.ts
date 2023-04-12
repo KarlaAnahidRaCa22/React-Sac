@@ -2,9 +2,8 @@
 export interface cotizacionDTO{
     id: number;
     nombre: string;
-    poster: string;
     resumen?: string;
-    fechaLanzamiento: Date;
+    fechaLanzamiento?: Date;
     
 }
 

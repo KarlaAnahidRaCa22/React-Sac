@@ -1,0 +1,162 @@
+.rows{
+    width: 80%;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-auto-rows: 50px;
+}
+.accion{
+   text-align: center;
+   align-items: center;
+}
+.idCotizacion{
+    display: flex;
+    align-items: center;
+    
+}
+.vendedor{
+    display: flex;
+    align-items: center;
+}
+
+.cliente{
+    display: flex;
+    align-items: center;
+}
+.tienda{
+    display: flex;
+    align-items: center;
+}
+
+
+.row{
+    width: 80%;
+    right: 1rem;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-auto-rows: 50px;
+    
+    
+}
+.borrar{
+    text-align: center;
+    align-items: center;
+}
+.observaciones{
+    display: flex;
+    align-items: center;
+}
+.pre{
+    display: flex;
+    align-items: center;
+    
+}
+.fecha{
+    display: flex;
+    align-items: center;
+}
+
+
+.roww{
+    width: 90%;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: 50px;
+}
+.probabilidadVenta{
+    display: flex;
+    align-items: center;
+}
+.origen{
+    display: flex;
+    align-items: center;
+}
+.estatus{
+    display: flex;
+    align-items: center;
+}
+
+
+.tabla{
+    width: 70%;
+    margin: 10px auto;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-auto-rows: 50px;
+    position: fixed;
+    border: black 1px solid;
+}
+.columna{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 1.5em;
+    border: #b2b2b2 1px solid;
+}
+
+
+.footer{
+    width: 70%;
+    margin: 10px auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 50px;
+    position: fixed;
+    top: 800px;
+    border: black 1px solid;
+}
+.columnas{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    font-size: 1.5em;
+    top: -50px;
+    border: #b2b2b2 1px solid;
+}
+
+
+
+.logo{
+    width: 450px;
+    height: 400px;
+    margin: 10px auto;
+    display: grid;
+    align-items: center;
+    grid-auto-rows: 50px;
+    position: fixed;
+    right: 0px;
+    top: 350px;
+}
+
+
+.subtotal{
+    width: 28%;
+    margin: 10px auto;
+    display: grid;
+    align-items: center;
+    grid-auto-rows: 50px;
+    position: fixed;
+    right: 0px;
+    top: 400px
+}
+.boton{
+    width: 28%;
+    margin: 10px auto;
+    display: grid;
+    align-items: flex;
+    grid-auto-rows: 50px;
+    position: fixed;
+    right: 0px;
+    top: 450px;
+}
+.casilla{
+    width: 28%;
+    margin: 10px auto;
+    display: grid;
+    grid-auto-rows: 50px;
+    position: fixed;
+    right: 0px;
+    top: 500px
+    
+}

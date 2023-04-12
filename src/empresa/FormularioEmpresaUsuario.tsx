@@ -3,7 +3,7 @@ import { Form, Formik, FormikHelpers, FormikProps } from "formik";
 import { ChangeEvent, useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { usuarioDTO } from "../auth/auth.model";
-import Button from "../utils/Button";
+import Boton from "../utils/Boton";
 import { urlCuentas, urlEmpresa, urlEmpresaUsuario } from "../utils/endpoints";
 import FormGroupMarkdown from "../utils/FormGroupMarkdown";
 import FormGroupText from "../utils/FormGroupText";
@@ -28,6 +28,12 @@ export default function FormularioEmpresaUsuario(props: formularioEmpresaUsuario
         console.log(formikProps)
         formikProps.setFieldValue("usuarioId", e.target.value)
     }
+
+    function seleccionoEmpresa(e: any, formikProps: FormikProps<empresaUsuarioCreacionDTO>) {
+        console.log(e.target.value)
+        console.log(formikProps)
+        formikProps.setFieldValue("empresaId", e.target.value)
+    }
     
     useEffect(() => {
         axios.get(`${urlEmpresa}/todos`)
@@ -40,11 +46,7 @@ export default function FormularioEmpresaUsuario(props: formularioEmpresaUsuario
         })
     }, [])
     
-    function seleccionoEmpresa(e: any, formikProps: FormikProps<empresaUsuarioCreacionDTO>) {
-        console.log(e.target.value)
-        console.log(formikProps)
-        formikProps.setFieldValue("empresaId", e.target.value)
-    }
+    
 
     return (
         <>
@@ -69,7 +71,7 @@ export default function FormularioEmpresaUsuario(props: formularioEmpresaUsuario
                                 </select>
                             </div>
                             <br />
-                            <Button disabled={formikProps.isSubmitting} type="submit" >Conectar</Button>{"      "}
+                            <Boton disabled={formikProps.isSubmitting} type="submit" >Conectar</Boton>{"      "}
                             <Link className="btn btn-danger" to="/" >Cancelar</Link>
                             <br />
                             <br />

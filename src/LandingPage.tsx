@@ -4,10 +4,10 @@ import Login from "./Login";
 import ListadoCotizacion from "./cotizacion/ListadoCotizacion";
 import { landingPageDTO } from "./cotizacion/cotizacion.model";
 import AlertaContext from "./utils/AlertaContext";
-import { urlCotizacion } from "./utils/endpoints";
+import { urlCotizacion, urlEmpresaUsuario } from "./utils/endpoints";
 import Autorizado from "./auth/Autorizado";
 import Inicio from "./utils/inicio";
-import Button from "./utils/Button";
+import Boton from "./utils/Boton";
 import { NavLink } from "react-router-dom";
 
 export default function LandingPage(){
@@ -32,7 +32,7 @@ export default function LandingPage(){
             <AlertaContext.Provider value={() => cargarDatos()}>
                 
                 
-                <div className="d-flex">
+                <div style={{display:'flex', alignContent:'center' }}>
                         <Autorizado 
                             autorizado={<>
                                 <Inicio />
@@ -51,12 +51,15 @@ export default function LandingPage(){
                             </>}
                             noAutorizado={<>
                                 <Login />
+                                
                                 <li className="nav-item">
                                     <NavLink className="nav-link" activeClassName={claseActiva}
                                     to ="/empresaUsuario">
                                         Empresa Usuario
                                     </NavLink>
                                 </li>
+                                
+                                
                                 <li className="nav-item">
                                     <NavLink className="nav-link" activeClassName={claseActiva}
                                     to="/usuario">
@@ -69,6 +72,7 @@ export default function LandingPage(){
                                         Empresa
                                     </NavLink>
                                 </li>
+                                
                             </>}
                         />
                         

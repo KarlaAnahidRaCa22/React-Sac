@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 import { claim } from './auth/auth.model';
 import { obtenerClaims } from './auth/manejadorJWT';
 import { configurarInterceptor } from './utils/interceptores';
+import ContentWrapper from './utils/ContentWrapper';
 
 configurarValidaciones();
 configurarInterceptor();
@@ -30,14 +31,16 @@ function App() {
 
   return (
     <>
+    <ContentWrapper >
       <BrowserRouter>
         <AutenticacionContext.Provider value={{ claims, actualizar }}>
           <Menu />
-            <div className="container">
+            <div>
           <Switch>
             {rutas.map(ruta => 
               <Route key={ruta.path} path={ruta.path}
                 exact={ruta.exact}><ruta.componente />
+                
                  {/* {ruta.esAdmin && !esAdmin() ? <>
                     No tiene permiso para acceder a este componente
                   </> */} 
@@ -47,6 +50,7 @@ function App() {
             {/*<Login />*/}
         </AutenticacionContext.Provider>
       </BrowserRouter>
+      </ContentWrapper>
     </>
   );
 }

@@ -1,6 +1,6 @@
 import axios from "axios";
 import Swal from "sweetalert2";
-import Button from "../utils/Button";
+import Boton from "../utils/Boton";
 import confirmar from "../utils/Confirmar";
 import { urlCuentas } from "../utils/endpoints";
 import IndiceEntidad from "../utils/IndiceEntidad";
@@ -31,6 +31,7 @@ export default function IndiceUsuario() {
     }
 
     return (
+        
         <IndiceEntidad<usuarioDTO> 
             url={`${urlCuentas}/listadoUsuario`}
             titulo="Usuario"
@@ -45,14 +46,14 @@ export default function IndiceUsuario() {
                 <tbody>
                     {usuario?.map(usuario => <tr key={usuario.id}>
                         <td>
-                            <Button 
+                            <Boton 
                                 onClick={() => confirmar(() => hacerAdmin(usuario.id), 
                                             `¿Desea hacer a ${usuario.email} admin?`, 'Realizar')}>
-                                    Hacer Admin</Button>
-                            <Button className="btn btn-danger" style={{ marginLeft: '1rem' }} 
+                                    Hacer Admin</Boton>
+                            <Boton className="btn btn-danger" style={{ marginLeft: '1rem' }} 
                                 onClick={() => confirmar(() => removerAdmin(usuario.id), 
                                             `¿Desea remover a ${usuario.email} como admin?`, 'Realizar')}>
-                                    Remover Admin</Button>
+                                    Remover Admin</Boton>
                         </td>
                         <td>
                             {usuario.email}
@@ -60,6 +61,8 @@ export default function IndiceUsuario() {
                     </tr>)}
                 </tbody>
             </>}
+            
         </IndiceEntidad>
+        
     )
 }

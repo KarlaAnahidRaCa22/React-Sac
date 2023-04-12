@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import { ReactElement, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import Button from "./Button";
+import Boton from "./Boton";
 import confirmar from "./Confirmar";
 import ListadoGenerico from "./ListadoGenerico";
 import Paginacion from "./Paginacion";
@@ -44,9 +44,9 @@ export default function IndiceEntidad<T>(props: indiceEntidadProps<T>){
 
     const botones = (urlEditar: string, id: number) => <>
         <Link className="btn btn-success" to={urlEditar}>Editar</Link>
-        <Button 
+        <Boton 
             onClick={() => confirmar(() => borrar(id))}
-            className="btn btn-danger">Borrar</Button>
+            className="btn btn-danger">Borrar</Boton>
     </>
 
     return (

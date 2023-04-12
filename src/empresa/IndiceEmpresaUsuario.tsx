@@ -5,7 +5,7 @@ import { Link, useHistory } from "react-router-dom";
 import AutenticacionContext from "../auth/AutenticacionContext";
 import { credencialesUsuario, respuestaAutenticacion, usuarioDTO } from "../auth/auth.model";
 import { guardarTokenLocalStorage, obtenerClaims } from "../auth/manejadorJWT";
-import Button from "../utils/Button";
+import Boton from "../utils/Boton";
 import Cargando from "../utils/Cargando";
 import { urlCuentas, urlEmpresa, urlEmpresaUsuario } from "../utils/endpoints";
 import { convertirEmpresaUsuarioAFormData } from "../utils/formDataUtils";

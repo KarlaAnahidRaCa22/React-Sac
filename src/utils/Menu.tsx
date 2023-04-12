@@ -3,9 +3,10 @@ import { Link, NavLink, useHistory } from "react-router-dom";
 import AutenticacionContext from "../auth/AutenticacionContext";
 import Autorizado from "../auth/Autorizado";
 import { logout } from "../auth/manejadorJWT";
-import Button from "./Button";
-import logo from "../img/logo.png"
+import Boton from "./Boton";
+import evolsoft from "../img/evolsoft.png"
 import RedireccionarALanding from "./RedireccionarALanding";
+import FormGroupFecha from "./FormGroupFecha";
 
 export default function Menu(){
     const claseActiva = "active";
@@ -16,11 +17,12 @@ export default function Menu(){
         return claims.filter(x => x.nombre === "email")[0]?.valor;
     }
     
+    
     return (
         <>
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
             <div className="container-fluid">
-            <img src={logo}
+            <img src={evolsoft}
                 style={{bottom: '5px', right: '5px', width: '2vw'}} />
                 <NavLink className="navbar-brand" 
                 activeClassName={claseActiva}
@@ -31,37 +33,14 @@ export default function Menu(){
                     
                            <Autorizado role="admin"
                             autorizado={<>     
-                        <li className="nav-item">
-                            <NavLink className="nav-link" activeClassName={claseActiva} 
-                            to="/cotizacion/filtro">
-                                Filtrar Cotizacion
-                            </NavLink>
-                        </li>
                         
-                                <li className="nav-item">
-                                    <NavLink className="nav-link" activeClassName={claseActiva} 
-                                    to="/generos">
-                                        Géneros
-                                    </NavLink>
-                                </li>
-                                <li className="nav-item">
-                                    <NavLink className="nav-link" activeClassName={claseActiva} 
-                                    to="/actores">
-                                        Actores
-                                    </NavLink>
-                                </li>
                                 <li className="nav-item">
                                     <NavLink className="nav-link" activeClassName={claseActiva} 
                                     to="/usuario">
                                         Usuario
                                     </NavLink>
                                 </li>
-                                <li className="nav-item">
-                                    <NavLink className="nav-link" activeClassName={claseActiva}
-                                    to ="/menu">
-                                        Menu
-                                    </NavLink>
-                                </li>
+                                
                                         {/*<NavLink className="nav-link" activeClassName={claseActiva}
                                     to="/Menu">
                                         Menu
@@ -99,12 +78,13 @@ export default function Menu(){
                         <Autorizado 
                             autorizado={<>
                                 <span className="nav-link">Bienvenido, {obtenerNombreUsuario()}</span>
-                                <Button 
+                                {/*<span className="nav-date"><FormGroupFecha campo={"fecha"} label={"fecha"} /></span>*/}
+                                <Boton 
                                 onClick={() => {
                                     logout();
                                     actualizar([]);
                                 }}
-                                className="nav-link btn btn-link">Cerrar Sesión</Button>
+                                className="nav-link btn btn-link">Cerrar Sesión</Boton>
                                 
                                 
                             </>}

@@ -1,0 +1,16 @@
+body{ margin: 0;}
+.container{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background-size: cover;
+    height: 100vh;
+}
+.left{
+    background: linear-gradient(red, blue);
+    display: flex;
+    place-items: center;
+    text-align: center;
+}
+.right{
+
+}

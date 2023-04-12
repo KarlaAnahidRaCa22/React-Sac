@@ -8,39 +8,39 @@ import { guardarTokenLocalStorage, obtenerClaims } from "./auth/manejadorJWT";
 import { urlCuentas } from "./utils/endpoints";
 import { MostrarErrores } from "./utils/MostrarErrores";
 
-export default function Login(){
+export default function Login() {
+  const { actualizar } = useContext(AutenticacionContext);
+  const [errores, setErrores] = useState<string[]>([]);
+  const history = useHistory();
 
-    const {actualizar} = useContext(AutenticacionContext);
-    const [errores, setErrores] = useState<string[]>([]);
-    const history = useHistory();
+  async function login(credenciales: credencialesUsuario) {
+    try {
+      const respuesta = await axios.post<respuestaAutenticacion>(
+        `${urlCuentas}/login`,
+        credenciales
+      );
 
-    async function login(credenciales: credencialesUsuario){
-        try {
-            const respuesta = await 
-                    axios.post<respuestaAutenticacion>(`${urlCuentas}/login`, credenciales);
-
-                    guardarTokenLocalStorage(respuesta.data);
-                    actualizar(obtenerClaims());
-                    history.push("/");
-            console.log(respuesta);
-        } 
-        catch (error) {
-            setErrores(error.response.data);
-        }
+      guardarTokenLocalStorage(respuesta.data);
+      actualizar(obtenerClaims());
+      history.push("/");
+      console.log(respuesta);
+    } catch (error) {
+      setErrores(error.response.data);
     }
+  }
 
-    return(
-        <>
-        <br />
-            <h1><br />SACWEB</h1>
-            <br />
-            <br />
-            <MostrarErrores errores={errores} />
-            <br />
-            <FormularioAuth 
-                modelo={{email: '', password: ''}}
-                onSubmit={async valores => await login(valores)}
-            /><br />
-        </>
-    )
+  return (
+    <>
+      <div style={{marginBlock:'150px', marginLeft: '150px'
+    }}>
+        
+
+        <MostrarErrores errores={errores} />
+        <FormularioAuth
+          modelo={{ email: "", password: "" }}
+          onSubmit={async (valores) => await login(valores)}
+        />
+      </div>
+    </>
+  );
 }
