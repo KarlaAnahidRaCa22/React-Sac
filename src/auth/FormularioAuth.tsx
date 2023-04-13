@@ -20,7 +20,7 @@ export default function FormularioAuth(props: formularioAuthProps) {
       })}
     >
       {(formikProps) => (
-        <Form style={{ fontFamily: "cursive", fontSize: "25px", width:'450px', marginLeft:'700px' }}>
+        <Form style={{ fontFamily: "cursive", fontSize: "25px", width:'350px', marginLeft:'500px', overflow:'hidden'  }}>
           <h1>SACWEB</h1>
           <br />
           <br />

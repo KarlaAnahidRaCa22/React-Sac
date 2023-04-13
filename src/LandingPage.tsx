@@ -32,7 +32,7 @@ export default function LandingPage(){
             <AlertaContext.Provider value={() => cargarDatos()}>
                 
                 
-                <div style={{display:'flex', alignContent:'center' }}>
+                <div style={{display:'flex', alignContent:'center'}}>
                         <Autorizado 
                             autorizado={<>
                                 <Inicio />

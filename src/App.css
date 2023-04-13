@@ -36,3 +36,10 @@
     transform: rotate(360deg);
   }
 }
+
+.landig{
+  width: 100%;
+  margin: 0 auto;
+  overflow: hidden;
+  background-color: rgb(130, 151, 170);
+}

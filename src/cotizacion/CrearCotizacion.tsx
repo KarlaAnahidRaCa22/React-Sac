@@ -45,7 +45,9 @@ export default function CrearCotizacion(){
         <>
             <ContentWrapper>
            <MostrarErrores errores={errores} />
-           <FiltroCotizacion />
+           <FiltroCotizacion
+                
+           />
            
           </ContentWrapper>
            {/* <FormularioCotizacion modelo={cotizacion} 

@@ -48,11 +48,11 @@ export default function IndiceUsuario() {
                         <td>
                             <Boton 
                                 onClick={() => confirmar(() => hacerAdmin(usuario.id), 
-                                            `¿Desea hacer a ${usuario.email} admin?`, 'Realizar')}>
+                                        `¿Desea hacer a ${usuario.email} admin?`, 'Realizar')}>
                                     Hacer Admin</Boton>
                             <Boton className="btn btn-danger" style={{ marginLeft: '1rem' }} 
                                 onClick={() => confirmar(() => removerAdmin(usuario.id), 
-                                            `¿Desea remover a ${usuario.email} como admin?`, 'Realizar')}>
+                                        `¿Desea remover a ${usuario.email} como admin?`, 'Realizar')}>
                                     Remover Admin</Boton>
                         </td>
                         <td>

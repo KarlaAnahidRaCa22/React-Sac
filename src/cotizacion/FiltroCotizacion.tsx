@@ -1,12 +1,12 @@
 import axios, { AxiosResponse } from "axios";
-import { Field, Form, Formik } from "formik";
+import { Field, Form, Formik, FormikProps } from "formik";
 import { useEffect, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import Boton from "../utils/Boton";
 import { urlCotizacion } from "../utils/endpoints";
 import Paginacion from "../utils/Paginacion";
 import ListadoCotizacion from "./ListadoCotizacion";
-import { cotizacionDTO } from "./cotizacion.model";
+import { cotizacionDTO, vendedorDTO } from "./cotizacion.model";
 import "bootstrap/dist/css/bootstrap.min.css";
 import DataTable from "react-data-table-component";
 import "./FiltroCotizacion.css";
@@ -24,8 +24,26 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Button from "@material-ui/core/Button";
+import IndiceEntidad from "../utils/IndiceEntidad";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
 export default function FiltroCotizacion() {
+  const [vendedor, setVendedor] = useState<vendedorDTO[]>([]);
+
+  function seleccionoVendedor(e: any, formikProps: FormikProps<vendedorDTO>) {
+    console.log(e.target.value);
+    console.log(formikProps);
+    formikProps.setFieldValue("clave_usuario", e.target.value);
+  }
+
+  useEffect(() => {
+    axios
+      .get(`${urlCotizacion}/listadoVendedor`)
+      .then((respuesta: AxiosResponse<vendedorDTO[]>) => {
+        setVendedor(respuesta.data);
+      });
+  }, []);
+
   const tiempoTranscurrido = Date.now();
   const hoy = new Date(tiempoTranscurrido);
 
@@ -164,7 +182,7 @@ export default function FiltroCotizacion() {
               >
                 <div className="rows">
                   <div className="accion">
-                    <h5 style={{textAlign: 'center'}}>Acciones</h5>
+                    <h5 style={{ textAlign: "center" }}>Acciones</h5>
                     {/*<Button
                       className="btn btn-danger mx-sm-2 mb-2"
                       onClick={() => {
@@ -187,7 +205,12 @@ export default function FiltroCotizacion() {
                     />
                   </div>
                   <div className="vendedor">
-                    <label onClick={handleClickOpen}  style={{color:'blue', textDecoration:'underline'}}>Vendedor:</label>
+                    <label
+                      onClick={handleClickOpen}
+                      style={{ color: "blue", textDecoration: "underline" }}
+                    >
+                      Vendedor:
+                    </label>
                     <Dialog
                       open={open}
                       onClose={handleClose}
@@ -197,12 +220,15 @@ export default function FiltroCotizacion() {
                         <div>Vendedor</div>
                       </DialogTitle>
                       <DialogContent>
-                        <div className="container-fluid">
-                          <form className="d-flex">
-                            <input className="form-control me-2 light-table-filter" data-table="table"
-                              type="text" placeholder="buscar vendedor" />
-                              <hr></hr>
-                          </form>
+                        <div className="table-responsive">
+                          <div className="barraBusqueda">
+                            <input 
+                            type="text"
+                            placeholder="Buscar Vendedor"
+                            className="textField"
+                            name="busqueda"
+                            />
+                          </div>
                         </div>
                       </DialogContent>
                       <DialogActions>
@@ -217,14 +243,19 @@ export default function FiltroCotizacion() {
                     <input
                       type="text"
                       className="form-control"
-                      id="username"
+                      id="clave_usuario"
                       style={{ width: "220px" }}
                       placeholder="Nombre del vendedor"
-                      {...formikProps.getFieldProps("username")}
+                      {...formikProps.getFieldProps("clave_usuario")}
                     />
                   </div>
                   <div className="cliente">
-                    <label onClick={handleClickOpen1}  style={{color:'blue', textDecoration:'underline'}}>Cliente:</label>
+                    <label
+                      onClick={handleClickOpen1}
+                      style={{ color: "blue", textDecoration: "underline" }}
+                    >
+                      Cliente:
+                    </label>
                     <Dialog
                       open={open1}
                       onClose={handleClose1}
@@ -232,11 +263,15 @@ export default function FiltroCotizacion() {
                     >
                       <DialogTitle id="form-dialog-title">Cliente</DialogTitle>
                       <DialogContent>
-                      <div className="container-fluid">
+                        <div className="container-fluid">
                           <form className="d-flex">
-                            <input className="form-control me-2 light-table-filter" data-table="table"
-                              type="text" placeholder="buscar cliente" />
-                              <hr></hr>
+                            <input
+                              className="form-control me-2 light-table-filter"
+                              data-table="table"
+                              type="text"
+                              placeholder="buscar cliente"
+                            />
+                            <hr></hr>
                           </form>
                         </div>
                       </DialogContent>
@@ -258,11 +293,11 @@ export default function FiltroCotizacion() {
                       {...formikProps.getFieldProps("nombre")}
                     />
                   </div>
-                  <div className="tienda" style={{width: '220px'}}>
-                    <div style={{width: '100px'}}>Tienda:</div>
+                  <div className="tienda" style={{ width: "220px" }}>
+                    <div style={{ width: "100px" }}>Tienda:</div>
                     <select className="form-control">
                       <option value="0">MATRIZ</option>
-                      <option value="1">Muy baja</option>
+                      <option value="1">SUCURSAL   </option>
                       <option value="2">Baja</option>
                       <option value="3">Normal</option>
                       <option value="4">Alta</option>
@@ -270,8 +305,8 @@ export default function FiltroCotizacion() {
                   </div>
                 </div>
 
-                <div className="row" >
-                  <div className="borrar" style={{right: '10px'}}>
+                <div className="row">
+                  <div className="borrar" style={{ right: "10px" }}>
                     <Boton
                       className="btn btn-danger mx-sm-2 mb-2"
                       onClick={() =>
@@ -292,11 +327,11 @@ export default function FiltroCotizacion() {
                       id="nombre"
                       placeholder=""
                       {...formikProps.getFieldProps("nombre")}
-                      style={{width: '900px'}}
+                      style={{ width: "900px" }}
                     />
                   </div>
                   <div className="pre">Precio2:</div>
-                  <div className="fecha" style={{width: '200px'}}>
+                  <div className="fecha" style={{ width: "200px" }}>
                     Fecha:
                     {/*today.toString()*/}
                     {hoy.toDateString()}
@@ -304,8 +339,8 @@ export default function FiltroCotizacion() {
                 </div>
 
                 <div className="roww">
-                  <div className="probabilidadVenta" style={{width: '400px'}}>
-                    <div style={{width: '220px'}}>Probabilidad Venta</div>
+                  <div className="probabilidadVenta" style={{ width: "400px" }}>
+                    <div style={{ width: "220px" }}>Probabilidad Venta</div>
                     <select className="form-control">
                       <option value="0">Muy Baja</option>
                       <option value="1">Baja</option>
@@ -313,8 +348,8 @@ export default function FiltroCotizacion() {
                       <option value="3">Alta</option>
                     </select>
                   </div>
-                  <div className="origen" style={{width: '300px'}}>
-                    <div style={{width: '70px'}}>Origen</div>
+                  <div className="origen" style={{ width: "300px" }}>
+                    <div style={{ width: "70px" }}>Origen</div>
                     <select className="form-control">
                       <option value="0">Mostrador</option>
                       <option value="1">Cliente</option>
@@ -325,7 +360,7 @@ export default function FiltroCotizacion() {
                   <div className="estatus">Estatus</div>
                 </div>
 
-                <div className="tabla" >
+                <div className="tabla">
                   <div className="columna">Cantidad</div>
                   <div className="columna">Clave</div>
                   <div className="columna">Articulo</div>
@@ -340,56 +375,58 @@ export default function FiltroCotizacion() {
                   <div className="columnas">Articulo:</div>
                 </div>
               </div>
-                
-                
-                <div className="logo">
-                    <img src={evolsoft} style={{ width: "350px", right: "350px", marginTop: '50px'}} />
-                </div>
-                <br />
-                <br />
-                <div className="subtotal" style={{ marginTop: '230px'}}>
-                  <div className="subtotals">
-                    <h1>SUBTOTAL:</h1>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="nombre"
-                      style={{ width: "220px" }}
-                      placeholder="$0.00"
-                      {...formikProps.getFieldProps("nombre")}
-                    />
-                    </div>
-                </div>
 
-                <div
-                  className="boton"
-                  style={{ backgroundColor: "greenyellow", marginTop: '330px'}}
-                >
-                  <Boton
-                    onClick={() => {
-                      formikProps.setValues(valorInicial);
-                      buscarCotizacion(valorInicial);
-                    }}
-                  >
-                    <FontAwesomeIcon icon={faPlay} beat /> {"          "}
-                    Generar (F12)
-                  </Boton>
-                </div>
-                <div className="casilla" style={{ float: 'left', width: '20%', marginTop: '350px' }}>
-                  <Field
-                    className="form-check-input"
-                    id="enviarCotizacion"
-                    name="enviarCotizacion"
-                    type="checkbox"
+              <div className="logo">
+                <img
+                  src={evolsoft}
+                  style={{ width: "350px", right: "350px", marginTop: "50px" }}
+                />
+              </div>
+              <br />
+              <br />
+              <div className="subtotal" style={{ marginTop: "230px" }}>
+                <div className="subtotals">
+                  <h1>SUBTOTAL:</h1>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="nombre"
+                    style={{ width: "220px" }}
+                    placeholder="$0.00"
+                    {...formikProps.getFieldProps("nombre")}
                   />
-                  <label
-                    className="form-check-label"
-                    htmlFor="enviarCotizacion"
-                  >
-                    Enviar cotizacion por correo electrónico
-                  </label>
                 </div>
-                
+              </div>
+
+              <div
+                className="boton"
+                style={{ backgroundColor: "greenyellow", marginTop: "330px" }}
+              >
+                <Boton
+                  onClick={() => {
+                    formikProps.setValues(valorInicial);
+                    buscarCotizacion(valorInicial);
+                  }}
+                >
+                  <FontAwesomeIcon icon={faPlay} beat /> {"          "}
+                  Generar (F12)
+                </Boton>
+              </div>
+              <div
+                className="casilla"
+                style={{ float: "left", width: "20%", marginTop: "350px" }}
+              >
+                <Field
+                  className="form-check-input"
+                  id="enviarCotizacion"
+                  name="enviarCotizacion"
+                  type="checkbox"
+                />
+                <label className="form-check-label" htmlFor="enviarCotizacion">
+                  Enviar cotizacion por correo electrónico
+                </label>
+              </div>
+
               {/*  <div className="">
                         <div className="form-inline">
                           <Button className="btn btn-danger mx-sm-2 mb-2"
