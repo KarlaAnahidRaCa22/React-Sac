@@ -9,10 +9,11 @@ import Autorizado from "./auth/Autorizado";
 import Inicio from "./utils/inicio";
 import Boton from "./utils/Boton";
 import { NavLink } from "react-router-dom";
+import IndiceVendedor from "./vendedor/IndiceVendedor";
 
 export default function LandingPage(){
 
-    const claseActiva = "active";
+    /*const claseActiva = "active";
     const [cotizacion, setCotizacion] = useState<landingPageDTO>({})
   
     useEffect(() => {
@@ -24,36 +25,34 @@ export default function LandingPage(){
       .then((respuesta: AxiosResponse<landingPageDTO>) => {
         setCotizacion(respuesta.data);
       })
-    }
+    }*/
 
     return(
         <>
-
-            <AlertaContext.Provider value={() => cargarDatos()}>
-                
-                
-                <div style={{display:'flex', alignContent:'center'}}>
+      
+                <div style={{display:'flex', alignContent:'center', backgroundColor:'gray'}}>
                         <Autorizado 
                             autorizado={<>
                                 <Inicio />
                                 <li className="nav-item">
-                                    <NavLink className="nav-link" activeClassName={claseActiva}
+                                    <NavLink className="nav-link" 
                                     to ="/empresaUsuario">
                                         Empresa Usuario
                                     </NavLink>
                                 </li>
                                 <li className="nav-item">
-                                    <NavLink className="nav-link" activeClassName={claseActiva}
+                                    <NavLink className="nav-link" 
                                     to="/empresa">
                                         Empresa
                                     </NavLink>
                                 </li>
+                                <IndiceVendedor/>
                             </>}
                             noAutorizado={<>
                                 <Login />
                                 
                                 <li className="nav-item">
-                                    <NavLink className="nav-link" activeClassName={claseActiva}
+                                    <NavLink className="nav-link"
                                     to ="/empresaUsuario">
                                         Empresa Usuario
                                     </NavLink>
@@ -61,13 +60,13 @@ export default function LandingPage(){
                                 
                                 
                                 <li className="nav-item">
-                                    <NavLink className="nav-link" activeClassName={claseActiva}
+                                    <NavLink className="nav-link" 
                                     to="/usuario">
                                         Usuario
                                     </NavLink>
                                 </li>
                                 <li className="nav-item">
-                                    <NavLink className="nav-link" activeClassName={claseActiva}
+                                    <NavLink className="nav-link"
                                     to="/empresa">
                                         Empresa
                                     </NavLink>
@@ -79,7 +78,7 @@ export default function LandingPage(){
                 </div>
                 <br/>
                 
-            </AlertaContext.Provider>
+            
             
         </>
     )

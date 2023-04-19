@@ -7,6 +7,7 @@ import { convertirCotizacionAFormData } from "../utils/formDataUtils";
 import { MostrarErrores } from "../utils/MostrarErrores";
 import FormularioCotizacion from "./FormularioCotizacion";
 import { cotizacionCreacionDTO, cotizacionDTO, cotizacionPutGetDTO } from "./cotizacion.model";
+import IndiceVendedor from "../vendedor/IndiceVendedor";
 
 export default function EditarCotizacion(){
 
@@ -56,6 +57,7 @@ export default function EditarCotizacion(){
             {cotizacion && cotizacionPutGet ? <FormularioCotizacion modelo={cotizacion} 
             onSubmit={async valores => await editar(valores)}                
             />  : <Cargando />}
+            
             
         </>
     )

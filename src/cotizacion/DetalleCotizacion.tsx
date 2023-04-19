@@ -7,7 +7,8 @@ import Cargando from "../utils/Cargando";
 import { coordenadaDTO } from "../utils/coordenadas.model";
 import { urlCotizacion } from "../utils/endpoints";
 import Mapa from "../utils/Mapa";
-import { cotizacionDTO } from "./cotizacion.model";
+import { cotizacionDTO, vendedorDTO } from "./cotizacion.model";
+import FormularioVendedor from "../vendedor/FormularioVendedor";
 
 export default function DetalleCotizacion(){
     /*const { id }: any = useParams();
@@ -45,6 +46,7 @@ export default function DetalleCotizacion(){
 
     
 */
+const [vendedores, setVendedor] = useState<vendedorDTO>();
     return (
         <>
         <h1>Detalle Cotizacion</h1>

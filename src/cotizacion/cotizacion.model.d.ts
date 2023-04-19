@@ -17,7 +17,7 @@ export interface cotizacionCreacionDTO{
 }
 
 export interface landingPageDTO {
-    proximosEstrenos?: login[];
+    proximosEstrenos?: cotizacionDTO[];
 }
 
 export interface cotizacionPutGetDTO {
@@ -27,4 +27,9 @@ export interface cotizacionPutGetDTO {
 export interface vendedorDTO{
     clave_usuario: number;
     nombre_usuario: string;
+}
+
+export interface clienteDTO{
+    clave_cte: number;
+    nombre: string;
 }

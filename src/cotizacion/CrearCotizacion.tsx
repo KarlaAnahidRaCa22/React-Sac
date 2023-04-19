@@ -13,6 +13,7 @@ import css from './CrearCotizacion.module.css';
 import SplitPane from "react-split-pane";
 import './Split.css'
 import ContentWrapper from "../utils/ContentWrapper";
+import IndiceVendedor from "../vendedor/IndiceVendedor";
 
 export default function CrearCotizacion(){
  
@@ -43,13 +44,13 @@ export default function CrearCotizacion(){
 
     return(
         <>
-            <ContentWrapper>
+            
            <MostrarErrores errores={errores} />
            <FiltroCotizacion
                 
            />
            
-          </ContentWrapper>
+          
            {/* <FormularioCotizacion modelo={cotizacion} 
             onSubmit={async valores => await crear(valores)}                
     /> */}
@@ -59,17 +60,5 @@ export default function CrearCotizacion(){
     ) 
 }
 
-  /* return(
-        <div className="CrearCotizacion">
-
-            <div className="container">
-                <p className="p">gdgdskgjkgsjbkdsjbgbdsbgjkdbgkbdkgbsdbjbajks
-                    dbsgbdsbhgjbshdgjsdbgjbsjgbsjdbgjsdbgjbsdgbhjs
-                    shbdgbshgbsjdbgjdsbgjbsdjgbsjbqwiejoijwoejrowj
-                    djskdsnwkwnsfjknrnusdnkjnrkjnjksjanknrerniutnj
-                </p>
-            </div>
-        </div>
-    )
-} */
+  
             

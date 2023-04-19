@@ -9,6 +9,10 @@ import FormGroupMarkdown from "../utils/FormGroupMarkdown";
 import FormGroupText from "../utils/FormGroupText";
 import { selectorMultipleModel } from "../utils/SelectorMultiple";
 import { empresaDTO, empresaUsuario, empresaUsuarioCreacionDTO } from "./empresaUsuario.model";
+import IndiceVendedor from "../vendedor/IndiceVendedor";
+import IndiceEmpresa from "./IndiceEmpresa";
+import IndiceUsuario from "../auth/IndiceUsuario";
+import { clienteDTO } from "../cotizacion/cotizacion.model";
 
 export default function FormularioEmpresaUsuario(props: formularioEmpresaUsuarioProps){
 
@@ -35,6 +39,7 @@ export default function FormularioEmpresaUsuario(props: formularioEmpresaUsuario
         formikProps.setFieldValue("empresaId", e.target.value)
     }
     
+   
     useEffect(() => {
         axios.get(`${urlEmpresa}/todos`)
         .then((respuesta: AxiosResponse<empresaDTO[]>) => {

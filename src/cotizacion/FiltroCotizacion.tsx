@@ -6,7 +6,7 @@ import Boton from "../utils/Boton";
 import { urlCotizacion } from "../utils/endpoints";
 import Paginacion from "../utils/Paginacion";
 import ListadoCotizacion from "./ListadoCotizacion";
-import { cotizacionDTO, vendedorDTO } from "./cotizacion.model";
+import { clienteDTO, cotizacionDTO, vendedorDTO } from "./cotizacion.model";
 import "bootstrap/dist/css/bootstrap.min.css";
 import DataTable from "react-data-table-component";
 import "./FiltroCotizacion.css";
@@ -24,13 +24,98 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Button from "@material-ui/core/Button";
-import IndiceEntidad from "../utils/IndiceEntidad";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import IndiceVendedor from "../vendedor/IndiceVendedor";
+import { table } from "console";
+import IndiceEntidad from "../utils/IndiceEntidad";
 
 export default function FiltroCotizacion() {
-  const [vendedor, setVendedor] = useState<vendedorDTO[]>([]);
 
-  function seleccionoVendedor(e: any, formikProps: FormikProps<vendedorDTO>) {
+  
+  const [vendedores, setVendedores] = useState<vendedorDTO[]>([]);
+  const [tablaVendedores, setTablaVendedores] = useState<vendedorDTO[]>([]);
+  const [busqueda, setBusqueda] = useState("");
+  const [clientes, setClientes] = useState<clienteDTO[]>([]);
+  const [tablaClientes, setTablaClientes] = useState<clienteDTO[]>([]);
+  const [busqueda1, setBusqueda1] = useState("");
+
+  const peticionGet = async () => {
+    await axios
+      .get(`${urlCotizacion}/listadoVendedor`)
+      .then((response) => {
+        setVendedores(response.data);
+        setTablaVendedores(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const peticionGet1 = async () => {
+    await axios
+      .get(`${urlCotizacion}/listadoClientes`)
+      .then((response) => {
+        setClientes(response.data);
+        setTablaClientes(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const handleChange = (e: any) => {
+    setBusqueda(e.target.value);
+    filtrar(e.target.value);
+  };
+
+  const handleChange1 = (e: any) => {
+    setBusqueda1(e.target.value);
+    filtrarClientes(e.target.value);
+  };
+
+  const filtrar = (terminoBusqueda: any) => {
+    var resultadosBusqueda = tablaVendedores.filter((elemento) => {
+      if (
+        elemento.nombre_usuario
+          .toString()
+          .toLowerCase()
+          .includes(terminoBusqueda.toLowerCase()) ||
+        elemento.clave_usuario
+          .toString()
+          .toLowerCase()
+          .includes(terminoBusqueda.toLowerCase())
+      ) {
+        return elemento;
+      }
+    });
+    setVendedores(resultadosBusqueda);
+  };
+
+  const filtrarClientes = (terminoBusqueda: any) => {
+    var resultadosBusqueda1 = tablaClientes.filter((elemento) => {
+      if (
+        elemento.nombre
+          .toString()
+          .toLowerCase()
+          .includes(terminoBusqueda.toLowerCase()) ||
+        elemento.clave_cte
+          .toString()
+          .toLowerCase()
+          .includes(terminoBusqueda.toLowerCase())
+      ) {
+        return elemento;
+      }
+    });
+    setClientes(resultadosBusqueda1);
+  };
+
+  useEffect(() => {
+    peticionGet();
+    peticionGet1();
+  }, []);
+
+  
+  /*function seleccionoVendedor(e: any, formikProps: FormikProps<vendedorDTO>) {
     console.log(e.target.value);
     console.log(formikProps);
     formikProps.setFieldValue("clave_usuario", e.target.value);
@@ -43,6 +128,7 @@ export default function FiltroCotizacion() {
         setVendedor(respuesta.data);
       });
   }, []);
+*/
 
   const tiempoTranscurrido = Date.now();
   const hoy = new Date(tiempoTranscurrido);
@@ -52,7 +138,30 @@ export default function FiltroCotizacion() {
     //enviarCotEmail: false,
     pagina: 1,
     recordsPorPagina: 10,
+    clave_usuario: [],
+    nombre_usuario: [],
   };
+  const [totalDePaginas, setTotalDePaginas] = useState(0);
+  useEffect(() => {
+    buscarVendedor(valorInicial);
+  }, []);
+
+  function buscarVendedor(valores: filtroCotizacionForm) {
+    console.log("Estos son los valores 1: ", valores);
+    //  modificarURL(valores);
+    axios
+      .get(`${urlCotizacion}/listadoVendedor`, { params: valores })
+      .then((respuesta: AxiosResponse<vendedorDTO[]>) => {
+        const totalDeRegistros = parseInt(
+          respuesta.headers["cantidadtotalregistros"],
+          10
+        );
+        setTotalDePaginas(
+          Math.ceil(totalDeRegistros / valorInicial.recordsPorPagina)
+        );
+        setVendedores(respuesta.data);
+      });
+  }
 
   //let today = new Date()
 
@@ -74,103 +183,53 @@ export default function FiltroCotizacion() {
   };
 
   // crea un nuevo objeto `Date`
-  //var today = new Date();
+  var today = new Date();
 
   // `getDate()` devuelve el día del mes (del 1 al 31)
-  //var day = today.getDate();
+  var day = today.getDate();
 
   // `getMonth()` devuelve el mes (de 0 a 11)
-  //var month = today.getMonth() + 1;
+  var month = today.getMonth() + 1;
 
   // `getFullYear()` devuelve el año completo
-  //var year = today.getFullYear();
+  var year = today.getFullYear();
 
   // muestra la fecha de hoy en formato `MM/DD/YYYY`
-  //console.log(`${month}/${day}/${year}`);
+  //console.log(`${day}/${month}/${year}`);
 
+  var año = `${day}/${month}/${year}`;
+  console.log(año);
   /*
     Resultado: 1/27/2020
 */
 
   const [cotizacion, setCotizacion] = useState<cotizacionDTO[]>([]);
 
-  //const [totalDePaginas, setTotalDePaginas] = useState(0);
+  useEffect(() => {}, []);
 
-  useEffect(() => {
-    /*  if (query.get('titulo')){
-            valorInicial.titulo = query.get('titulo')!;
-        }
+  const [VendedorSeleccionado, setVendedorSeleccionado] = useState("");
 
-        if (query.get('generoId')){
-            valorInicial.generoId = parseInt(query.get('generoId')!, 10);
-        }
-
-        if (query.get('proximosEstrenos')){
-            valorInicial.proximosEstrenos = true;
-        }
-
-        if (query.get('enCines')){
-            valorInicial.enCines = true;
-        }
-
-        if (query.get('pagina')){
-            valorInicial.pagina = parseInt(query.get('pagina')!, 10);
-        } */
-
-    buscarCotizacion(valorInicial);
-  }, []);
-
-  function buscarCotizacion(valores: filtroCotizacionForm) {
-    console.log("Estos son los valores 1: ", valores);
-    //  modificarURL(valores);
-    axios
-      .get(`${urlCotizacion}/filtrar`, { params: valores })
-      .then((respuesta: AxiosResponse<cotizacionDTO[]>) => {
-        const totalDeRegistros = parseInt(
-          respuesta.headers["cantidadtotalregistros"],
-          10
-        );
-        //setTotalDePaginas(Math.ceil(totalDeRegistros / valorInicial.recordsPorPagina));
-        setCotizacion(respuesta.data);
-      });
+  function handleRowClickOnTableVendedor(e: vendedorDTO) {
+    console.log("Esta es la data que mande: ", e);
+    setVendedorSeleccionado(e.nombre_usuario);
+    setOpen(false);
   }
 
-  /* function modificarURL(valores: filtroCotizacionForm){
-    console.log("Estos son los valores: ", valores)
-        const queryStrings: string[] = [];
-        if (valores.titulo){
-            queryStrings.push(`titulo=${valores.titulo}`);
-        }
+  const [ClienteSeleccionado, setClienteSeleccionado] = useState("");
 
-        if (valores.generoId !== 0){
-            queryStrings.push(`generoId=${valores.generoId}`);
-        }
+  function handleRowClickOnTableCliente(e: clienteDTO) {
+    console.log("Lo mande de la data: ", e);
+    setClienteSeleccionado(e.nombre);
+    setOpen1(false);
+  }
 
-        if (valores.proximosEstrenos){
-            queryStrings.push(`proximosEstrenos=${valores.proximosEstrenos}`);
-        }
-
-        if (valores.enCines){
-            queryStrings.push(`enCines=${valores.enCines}`);
-        }
-
-        queryStrings.push(`pagina=${valores.pagina}`);
-        //titulo=ivan&pagina=28&...
-        history.push(`/cotizacion/filtrar?${queryStrings.join('&')}`)
-    }
-*/
   return (
     <>
-      {/*<nav className="navbar navbar-expand-ancho navbar-light bg-light">
-        <div className="container-fluid">
-        <div className="collapse navbar-collapse" 
-                    style={{display: 'flex', justifyContent: 'space-between' }}>
-    <ul className="navbar-nav me-auto mb-2 mb-lg-0"> */}
       <Formik
         initialValues={valorInicial}
         onSubmit={(valores) => {
           valores.pagina = 1;
-          buscarCotizacion(valores);
+          buscarVendedor(valores);
         }}
       >
         {(formikProps) => (
@@ -183,15 +242,6 @@ export default function FiltroCotizacion() {
                 <div className="rows">
                   <div className="accion">
                     <h5 style={{ textAlign: "center" }}>Acciones</h5>
-                    {/*<Button
-                      className="btn btn-danger mx-sm-2 mb-2"
-                      onClick={() => {
-                        formikProps.setValues(valorInicial);
-                        buscarCotizacion(valorInicial);
-                      }}
-                    >
-                      Borrar
-                    </Button>*/}
                   </div>
                   <div className="idCotizacion">
                     IdCotizaciones:
@@ -220,87 +270,121 @@ export default function FiltroCotizacion() {
                         <div>Vendedor</div>
                       </DialogTitle>
                       <DialogContent>
-                        <div className="table-responsive">
-                          <div className="barraBusqueda">
-                            <input 
-                            type="text"
-                            placeholder="Buscar Vendedor"
-                            className="textField"
-                            name="busqueda"
-                            />
-                          </div>
+                        <div className="containerInput">
+                          <input
+                            className="form-control inputBuscar"
+                            value={busqueda}
+                            placeholder="Buscar..."
+                            onChange={handleChange}
+                          />
+
+                          {open && (
+                            <div className="table-responsive" id="tabla">
+                              <table className="table table-sm table-bordered">
+                                <thead>
+                                  <tr>
+                                    <th>clave_usuario</th>
+                                    <th>nombre_usuario</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {vendedores &&
+                                    vendedores.map((vendedor) => (
+                                      <tr
+                                        key={vendedor.clave_usuario}
+                                        onClick={(e) => {
+                                          handleRowClickOnTableVendedor(
+                                            vendedor
+                                          );
+                                        }}
+                                      >
+                                        <td>{vendedor.clave_usuario}</td>
+                                        <td>{vendedor.nombre_usuario}</td>
+                                      </tr>
+                                    ))}
+                                </tbody>
+                              </table>
+                            </div>
+                          )}
                         </div>
                       </DialogContent>
-                      <DialogActions>
-                        <Button onClick={handleClose} color="primary">
-                          Cancelar
-                        </Button>
-                        <Button onClick={handleClose} color="primary">
-                          Agregar
-                        </Button>
-                      </DialogActions>
+                      <DialogActions></DialogActions>
                     </Dialog>
                     <input
                       type="text"
-                      className="form-control"
-                      id="clave_usuario"
-                      style={{ width: "220px" }}
-                      placeholder="Nombre del vendedor"
-                      {...formikProps.getFieldProps("clave_usuario")}
-                    />
+                      id="tbVendedor"
+                      value={VendedorSeleccionado}
+                    ></input>
                   </div>
+
                   <div className="cliente">
                     <label
                       onClick={handleClickOpen1}
                       style={{ color: "blue", textDecoration: "underline" }}
                     >
-                      Cliente:
+                      Clientes:
                     </label>
                     <Dialog
                       open={open1}
                       onClose={handleClose1}
-                      aria-labelledby="form-dialog-title"
+                      aria-labelledby="form-dialog-tittle"
                     >
-                      <DialogTitle id="form-dialog-title">Cliente</DialogTitle>
+                      <DialogTitle id="form-dialog-tittle">
+                        <div>Cliente</div>
+                      </DialogTitle>
                       <DialogContent>
-                        <div className="container-fluid">
-                          <form className="d-flex">
-                            <input
-                              className="form-control me-2 light-table-filter"
-                              data-table="table"
-                              type="text"
-                              placeholder="buscar cliente"
-                            />
-                            <hr></hr>
-                          </form>
+                        <div className="containerInput">
+                          <input
+                            className="form-control inputBuscar"
+                            value={busqueda1}
+                            placeholder="Buscar..."
+                            onChange={handleChange1}
+                          />
+                          {open1 && (
+                            <div className="table-responsive" id="tabla">
+                              <table className="table table-sm table-bordered">
+                                <thead>
+                                  <tr>
+                                    <th>clave_cte</th>
+                                    <th>nombre</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {clientes &&
+                                    clientes.map((cliente) => (
+                                      <tr
+                                        key={cliente.clave_cte}
+                                        onClick={(e) => {
+                                          handleRowClickOnTableCliente(
+                                            cliente
+                                          );
+                                        }}
+                                      >
+                                        <td>{cliente.clave_cte}</td>
+                                        <td>{cliente.nombre}</td>
+                                      </tr>
+                                    ))}
+                                    
+                                </tbody>
+                              </table>
+                            </div>
+                          )}
                         </div>
                       </DialogContent>
-                      <DialogActions>
-                        <Button onClick={handleClose} color="primary">
-                          Cancelar
-                        </Button>
-                        <Button onClick={handleClose} color="primary">
-                          Agregar
-                        </Button>
-                      </DialogActions>
+                      <DialogActions></DialogActions>
                     </Dialog>
                     <input
                       type="text"
-                      className="form-control"
-                      id="nombre"
-                      style={{ width: "220px" }}
-                      placeholder="Nombre del cliente"
-                      {...formikProps.getFieldProps("nombre")}
-                    />
+                      id="tbCliente"
+                      value={ClienteSeleccionado}
+                    ></input>
                   </div>
+
                   <div className="tienda" style={{ width: "220px" }}>
                     <div style={{ width: "100px" }}>Tienda:</div>
                     <select className="form-control">
                       <option value="0">MATRIZ</option>
-                      <option value="1">SUCURSAL   </option>
-                      <option value="2">Baja</option>
-                      <option value="3">Normal</option>
-                      <option value="4">Alta</option>
+                      <option value="1">SUCURSAL </option>
                     </select>
                   </div>
                 </div>
@@ -334,7 +418,7 @@ export default function FiltroCotizacion() {
                   <div className="fecha" style={{ width: "200px" }}>
                     Fecha:
                     {/*today.toString()*/}
-                    {hoy.toDateString()}
+                    {año}
                   </div>
                 </div>
 
@@ -371,7 +455,6 @@ export default function FiltroCotizacion() {
                 </div>
 
                 <div className="footer">
-                  <div className="columnas">Cantidad:</div>
                   <div className="columnas">Articulo:</div>
                 </div>
               </div>
@@ -405,7 +488,7 @@ export default function FiltroCotizacion() {
                 <Boton
                   onClick={() => {
                     formikProps.setValues(valorInicial);
-                    buscarCotizacion(valorInicial);
+                    //buscarCotizacion(valorInicial);
                   }}
                 >
                   <FontAwesomeIcon icon={faPlay} beat /> {"          "}
@@ -573,4 +656,12 @@ interface filtroCotizacionForm {
   //enviarCotEmail: boolean;
   pagina: number;
   recordsPorPagina: number;
+  clave_usuario: vendedorDTO[];
+  nombre_usuario: vendedorDTO[];
 }
+
+/*interface filtroVendedorForm {
+  clave_usuario: vendedorDTO[];
+  nombre_usuario: vendedorDTO[];
+}
+*/

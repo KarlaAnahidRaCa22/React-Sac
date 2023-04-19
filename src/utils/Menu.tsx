@@ -23,7 +23,7 @@ export default function Menu(){
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
             <div className="container-fluid">
             <img src={evolsoft}
-                style={{bottom: '5px', right: '5px', width: '2vw'}} />
+                style={{bottom: '25px', right: '25px', width: '4vw'}} />
                 <NavLink className="navbar-brand" 
                 activeClassName={claseActiva}
                 to="/">React SAC</NavLink>
