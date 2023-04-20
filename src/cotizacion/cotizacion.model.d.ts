@@ -33,3 +33,19 @@ export interface clienteDTO{
     clave_cte: number;
     nombre: string;
 }
+
+export interface articulosDTO{
+    clave_art: string;
+    desc_art: string;
+    precio_base_compra: number;
+}
+
+export interface ventaDTO{
+    cantidad: number;
+    clave: string;
+    articulo: string;
+    precio: number;
+    porciento_descuento: number;
+    importe_descuento: number;
+    total: number;
+}

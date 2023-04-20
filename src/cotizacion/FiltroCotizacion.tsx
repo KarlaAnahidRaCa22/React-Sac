@@ -1,12 +1,18 @@
 import axios, { AxiosResponse } from "axios";
 import { Field, Form, Formik, FormikProps } from "formik";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
 import Boton from "../utils/Boton";
 import { urlCotizacion } from "../utils/endpoints";
 import Paginacion from "../utils/Paginacion";
 import ListadoCotizacion from "./ListadoCotizacion";
-import { clienteDTO, cotizacionDTO, vendedorDTO } from "./cotizacion.model";
+import {
+  articulosDTO,
+  clienteDTO,
+  cotizacionDTO,
+  vendedorDTO,
+  ventaDTO,
+} from "./cotizacion.model";
 import "bootstrap/dist/css/bootstrap.min.css";
 import DataTable from "react-data-table-component";
 import "./FiltroCotizacion.css";
@@ -26,18 +32,20 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import Button from "@material-ui/core/Button";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import IndiceVendedor from "../vendedor/IndiceVendedor";
-import { table } from "console";
+import { error, log, table } from "console";
 import IndiceEntidad from "../utils/IndiceEntidad";
 
 export default function FiltroCotizacion() {
-
-  
   const [vendedores, setVendedores] = useState<vendedorDTO[]>([]);
   const [tablaVendedores, setTablaVendedores] = useState<vendedorDTO[]>([]);
   const [busqueda, setBusqueda] = useState("");
   const [clientes, setClientes] = useState<clienteDTO[]>([]);
   const [tablaClientes, setTablaClientes] = useState<clienteDTO[]>([]);
   const [busqueda1, setBusqueda1] = useState("");
+  const [articulos, setArticulos] = useState<articulosDTO[]>([]);
+  const [tablaArticulos, setTablaArticulos] = useState<articulosDTO[]>([]);
+  const [busqueda2, setBusqueda2] = useState("");
+  const [venta, setVenta] = useState<ventaDTO[]>([]);
 
   const peticionGet = async () => {
     await axios
@@ -63,6 +71,18 @@ export default function FiltroCotizacion() {
       });
   };
 
+  const peticionGet2 = async () => {
+    await axios
+      .get(`${urlCotizacion}/Articulos`)
+      .then((response) => {
+        setArticulos(response.data);
+        setTablaArticulos(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   const handleChange = (e: any) => {
     setBusqueda(e.target.value);
     filtrar(e.target.value);
@@ -71,6 +91,11 @@ export default function FiltroCotizacion() {
   const handleChange1 = (e: any) => {
     setBusqueda1(e.target.value);
     filtrarClientes(e.target.value);
+  };
+
+  const handleChange2 = (e: any) => {
+    setBusqueda2(e.target.value);
+    filtrarArticulos(e.target.value);
   };
 
   const filtrar = (terminoBusqueda: any) => {
@@ -109,12 +134,30 @@ export default function FiltroCotizacion() {
     setClientes(resultadosBusqueda1);
   };
 
+  const filtrarArticulos = (terminoBusqueda: any) => {
+    var resultadosBusqueda2 = tablaArticulos.filter((elemento) => {
+      if (
+        elemento.clave_art
+          .toString()
+          .toLowerCase()
+          .includes(terminoBusqueda.toLowerCase()) ||
+        elemento.desc_art
+          .toString()
+          .toLowerCase()
+          .includes(terminoBusqueda.toLowerCase())
+      ) {
+        return elemento;
+      }
+    });
+    setArticulos(resultadosBusqueda2);
+  };
+
   useEffect(() => {
     peticionGet();
     peticionGet1();
+    peticionGet2();
   }, []);
 
-  
   /*function seleccionoVendedor(e: any, formikProps: FormikProps<vendedorDTO>) {
     console.log(e.target.value);
     console.log(formikProps);
@@ -167,6 +210,8 @@ export default function FiltroCotizacion() {
 
   const [open, setOpen] = React.useState(false);
   const [open1, setOpen1] = React.useState(false);
+  const [open2, setOpen2] = React.useState(false);
+  const [open3, setOpen3] = React.useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -180,6 +225,20 @@ export default function FiltroCotizacion() {
   };
   const handleClose1 = () => {
     setOpen1(false);
+  };
+
+  const handleClickOpen2 = () => {
+    setOpen2(true);
+  };
+  const handleClose2 = () => {
+    setOpen2(false);
+  };
+
+  const handleClickOpen3 = () => {
+    setOpen3(true);
+  };
+  const handleClose3 = () => {
+    setOpen3(false);
   };
 
   // crea un nuevo objeto `Date`
@@ -198,10 +257,13 @@ export default function FiltroCotizacion() {
   //console.log(`${day}/${month}/${year}`);
 
   var año = `${day}/${month}/${year}`;
-  console.log(año);
+
   /*
     Resultado: 1/27/2020
 */
+
+  //const ref = useRef(null);
+  const inputRef = useRef(null);
 
   const [cotizacion, setCotizacion] = useState<cotizacionDTO[]>([]);
 
@@ -221,6 +283,73 @@ export default function FiltroCotizacion() {
     console.log("Lo mande de la data: ", e);
     setClienteSeleccionado(e.nombre);
     setOpen1(false);
+  }
+
+  const [ArticuloSeleccionado, setArticuloSeleccionado] = useState("");
+  const [ventaActuals, setVentaActuals] = useState<ventaDTO>();
+  let ventaActual: ventaDTO = {
+    cantidad: 0,
+    clave: "0",
+    articulo: "0",
+    precio: 0,
+    porciento_descuento: 0,
+    importe_descuento: 0,
+    total: 0,
+  };
+  const [ventas, setVentas] = useState<ventaDTO[]>([]);
+
+  function handleRowClickOnTableArticulo(e: articulosDTO) {
+    console.log("Mande de data: ", e);
+
+    setArticuloSeleccionado(e.desc_art);
+    let cantidades: any = "1";
+    try {
+      cantidades = $("#cant").val();
+    } catch {}
+    let claves = e.clave_art;
+    let productos = e.desc_art;
+    let precios = e.precio_base_compra;
+    let total = precios * parseInt(cantidades);
+    let venta: ventaDTO = {
+      cantidad: cantidades,
+      clave: claves,
+      articulo: productos,
+      precio: precios,
+      porciento_descuento: 0,
+      importe_descuento: 0,
+      total: total,
+    };
+
+    setVentaActuals(venta);
+    ventaActual = venta;
+    //setVentas([...ventas, venta]);
+    setOpen3(true);
+  }
+
+  const handleKeyDown = (event: any) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      ventaActual = ventaActuals!;
+      ventaActual.cantidad = event.target.value;
+
+      console.log("valooooor: ", event.target.value);
+
+      console.log("ValorActual: ", ventaActual);
+
+      setVentas([...ventas, ventaActual]);
+      setOpen3(false);
+    }
+  };
+
+  function agregarRenglon(e: any) {
+    console.log("e", e.target.values);
+
+    let cantidades = document.getElementById("#cant")!;
+
+    ventaActual = ventaActuals!;
+    //ventaActual.cantidad = parseInt(cantidades!);
+    setVentas([...ventas, ventaActual]);
+    setOpen3(false);
   }
 
   return (
@@ -251,7 +380,6 @@ export default function FiltroCotizacion() {
                       id="nombre"
                       style={{ width: "230px" }}
                       placeholder="Nombre de la cotizacion"
-                      {...formikProps.getFieldProps("nombre")}
                     />
                   </div>
                   <div className="vendedor">
@@ -355,16 +483,13 @@ export default function FiltroCotizacion() {
                                       <tr
                                         key={cliente.clave_cte}
                                         onClick={(e) => {
-                                          handleRowClickOnTableCliente(
-                                            cliente
-                                          );
+                                          handleRowClickOnTableCliente(cliente);
                                         }}
                                       >
                                         <td>{cliente.clave_cte}</td>
                                         <td>{cliente.nombre}</td>
                                       </tr>
                                     ))}
-                                    
                                 </tbody>
                               </table>
                             </div>
@@ -445,17 +570,128 @@ export default function FiltroCotizacion() {
                 </div>
 
                 <div className="tabla">
-                  <div className="columna">Cantidad</div>
-                  <div className="columna">Clave</div>
-                  <div className="columna">Articulo</div>
-                  <div className="columna">Precio</div>
-                  <div className="columna">% Descuento</div>
-                  <div className="columna">$ Descuento</div>
-                  <div className="columna">Subtotal</div>
+                  <table className="table table-sm table-bordered">
+                    <thead>
+                      <tr>
+                        <th>Cantidad</th>
+                        <th>Clave</th>
+                        <th>Articulo</th>
+                        <th>Precio</th>
+                        <th>% Descuento</th>
+                        <th>$ Descuento</th>
+                        <th>Subtotal</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {ventas &&
+                        ventas.map((venta) => (
+                          <tr key={venta.clave}>
+                            <td>{venta.cantidad}</td>
+                            <td>{venta.clave}</td>
+                            <td>{venta.articulo}</td>
+                            <td>{venta.precio}</td>
+                            <td>{venta.porciento_descuento}</td>
+                            <td>{venta.importe_descuento}</td>
+                            <td>{venta.total}</td>
+                          </tr>
+                        ))}
+                    </tbody>
+                  </table>
                 </div>
 
                 <div className="footer">
-                  <div className="columnas">Articulo:</div>
+                  <div className="columnas">
+                    <label
+                      onClick={handleClickOpen2}
+                      style={{ color: "blue", textDecoration: "underline" }}
+                    >
+                      Articulo:
+                    </label>
+                    <Dialog
+                      open={open2}
+                      onClose={handleClose2}
+                      aria-labelledby="form-dialog-tittle2"
+                      data-bs-target="#form-dialog-tittle"
+                    >
+                      <DialogTitle id="form-dialog-tittle2">
+                        Articulos
+                      </DialogTitle>
+                      <DialogContent>
+                        <div className="containerInput">
+                          <input
+                            className="form-control inputBuscar"
+                            value={busqueda2}
+                            placeholder="Buscar..."
+                            onChange={handleChange2}
+                          />
+                          {open2 && (
+                            <div className="table-responsive" id="tabla2">
+                              <table className="table table-sm table-bordered">
+                                <thead>
+                                  <tr>
+                                    <th>Clave</th>
+                                    <th>Articulo</th>
+                                    <th>Precio</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {articulos &&
+                                    articulos.map((articulo) => (
+                                      <tr
+                                        key={articulo.clave_art}
+                                        onClick={(e) => {
+                                          handleRowClickOnTableArticulo(
+                                            articulo
+                                          );
+                                        }}
+                                      >
+                                        <td id="clave">{articulo.clave_art}</td>
+                                        <td id="articulo">
+                                          {articulo.desc_art}
+                                        </td>
+                                        <td id="precio">
+                                          {articulo.precio_base_compra}
+                                        </td>
+                                      </tr>
+                                    ))}
+                                </tbody>
+                              </table>
+                            </div>
+                          )}
+                        </div>
+                      </DialogContent>
+                    </Dialog>
+                    <Dialog
+                      open={open3}
+                      onClose={handleClose3}
+                      aria-labelledby="form-dialog-tittle2"
+                      data-bs-target="#form-dialog-tittle"
+                    >
+                      <DialogTitle></DialogTitle>
+                      <DialogContent>
+                        <h2>Cantidad</h2>
+                        <input
+                          id="cant"
+                          type="text"
+                          ref={inputRef}
+                          className="form-control"
+                          title="Cantidad"
+                          placeholder="Cantidad..."
+                          onKeyDown={handleKeyDown}
+                        ></input>
+                        {
+                          //JAja, ahora va a ser con un ENTER en ves de renglon ;)
+                        }
+                      </DialogContent>
+                      <DialogActions></DialogActions>
+                    </Dialog>
+
+                    <input
+                      type="text"
+                      id="tbArticulo"
+                      style={{ width: "500px" }}
+                    ></input>
+                  </div>
                 </div>
               </div>
 
