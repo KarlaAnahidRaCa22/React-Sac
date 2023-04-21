@@ -11,9 +11,7 @@ import IndiceVendedor from "../vendedor/IndiceVendedor";
 
 export default function EditarCotizacion(){
 
-    let cotizacion:cotizacionDTO= {
-        id: 0, nombre: ''
-    }
+   
    // const [cotizacion, setCotizacion] = useState<cotizacionCreacionDTO>();
     const [cotizacionPutGet, setCotizacionPutGet] = useState<cotizacionPutGetDTO>();
     const {id}: any = useParams();
@@ -25,7 +23,7 @@ export default function EditarCotizacion(){
             .then((respuesta: AxiosResponse<cotizacionPutGetDTO>) => {
                 const modelo: cotizacionCreacionDTO = {
                     nombre: respuesta.data.cotizacion.nombre,
-                    resumen: respuesta.data.cotizacion.resumen,
+                    
                     
                 };
                 
@@ -54,9 +52,7 @@ export default function EditarCotizacion(){
         <>
             <h3>Editar Cotización</h3>
             <MostrarErrores errores={errores} />
-            {cotizacion && cotizacionPutGet ? <FormularioCotizacion modelo={cotizacion} 
-            onSubmit={async valores => await editar(valores)}                
-            />  : <Cargando />}
+           
             
             
         </>

@@ -1,10 +1,10 @@
-
 export interface cotizacionDTO{
     id: number;
     nombre: string;
-    resumen?: string;
-    fechaLanzamiento?: Date;
-    
+    vendedor: vendedorDTO;
+    cliente: clienteDTO;
+    ventas: ventaDTO[];
+
 }
 
 export interface cotizacionCreacionDTO{

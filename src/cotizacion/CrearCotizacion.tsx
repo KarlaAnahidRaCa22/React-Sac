@@ -17,9 +17,7 @@ import IndiceVendedor from "../vendedor/IndiceVendedor";
 
 export default function CrearCotizacion(){
  
-    let cotizacion:cotizacionDTO= {
-        id: 0, nombre: ''
-    }
+    
     const [cargado, setCargado] = useState(false);
     const history = useHistory();
     const [errores, setErrores] = useState<string[]>([]);

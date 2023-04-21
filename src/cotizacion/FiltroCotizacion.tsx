@@ -34,6 +34,7 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import IndiceVendedor from "../vendedor/IndiceVendedor";
 import { error, log, table } from "console";
 import IndiceEntidad from "../utils/IndiceEntidad";
+import { isNoSubstitutionTemplateLiteral } from "typescript";
 
 export default function FiltroCotizacion() {
   const [vendedores, setVendedores] = useState<vendedorDTO[]>([]);
@@ -46,6 +47,10 @@ export default function FiltroCotizacion() {
   const [tablaArticulos, setTablaArticulos] = useState<articulosDTO[]>([]);
   const [busqueda2, setBusqueda2] = useState("");
   const [venta, setVenta] = useState<ventaDTO[]>([]);
+  const [ventas, setVentas] = useState<ventaDTO[]>([]);
+  const [cotizacion, setCotizacion] = useState<cotizacionDTO[]>([]);
+
+  const [Subtotal, setSubtotal] = useState(0);
 
   const peticionGet = async () => {
     await axios
@@ -173,12 +178,7 @@ export default function FiltroCotizacion() {
   }, []);
 */
 
-  const tiempoTranscurrido = Date.now();
-  const hoy = new Date(tiempoTranscurrido);
-
   const valorInicial: filtroCotizacionForm = {
-    nombre: "",
-    //enviarCotEmail: false,
     pagina: 1,
     recordsPorPagina: 10,
     clave_usuario: [],
@@ -191,7 +191,6 @@ export default function FiltroCotizacion() {
 
   function buscarVendedor(valores: filtroCotizacionForm) {
     console.log("Estos son los valores 1: ", valores);
-    //  modificarURL(valores);
     axios
       .get(`${urlCotizacion}/listadoVendedor`, { params: valores })
       .then((respuesta: AxiosResponse<vendedorDTO[]>) => {
@@ -206,12 +205,11 @@ export default function FiltroCotizacion() {
       });
   }
 
-  //let today = new Date()
-
   const [open, setOpen] = React.useState(false);
   const [open1, setOpen1] = React.useState(false);
   const [open2, setOpen2] = React.useState(false);
   const [open3, setOpen3] = React.useState(false);
+  const [open4, setOpen4] = React.useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -241,6 +239,13 @@ export default function FiltroCotizacion() {
     setOpen3(false);
   };
 
+  const handleClickOpen4 = () => {
+    setOpen4(true);
+  };
+  const handleClose4 = () => {
+    setOpen4(false);
+  };
+
   // crea un nuevo objeto `Date`
   var today = new Date();
 
@@ -264,10 +269,7 @@ export default function FiltroCotizacion() {
 
   //const ref = useRef(null);
   const inputRef = useRef(null);
-
-  const [cotizacion, setCotizacion] = useState<cotizacionDTO[]>([]);
-
-  useEffect(() => {}, []);
+  const labelRef = useRef(null);
 
   const [VendedorSeleccionado, setVendedorSeleccionado] = useState("");
 
@@ -296,7 +298,6 @@ export default function FiltroCotizacion() {
     importe_descuento: 0,
     total: 0,
   };
-  const [ventas, setVentas] = useState<ventaDTO[]>([]);
 
   function handleRowClickOnTableArticulo(e: articulosDTO) {
     console.log("Mande de data: ", e);
@@ -322,35 +323,23 @@ export default function FiltroCotizacion() {
 
     setVentaActuals(venta);
     ventaActual = venta;
-    //setVentas([...ventas, venta]);
     setOpen3(true);
   }
 
   const handleKeyDown = (event: any) => {
     if (event.key === "Enter") {
       event.preventDefault();
+
       ventaActual = ventaActuals!;
       ventaActual.cantidad = event.target.value;
-
-      console.log("valooooor: ", event.target.value);
-
-      console.log("ValorActual: ", ventaActual);
+      let totals = ventaActual.precio * ventaActual.cantidad;
+      ventaActual.total = totals;
 
       setVentas([...ventas, ventaActual]);
       setOpen3(false);
+      setOpen2(false);
     }
   };
-
-  function agregarRenglon(e: any) {
-    console.log("e", e.target.values);
-
-    let cantidades = document.getElementById("#cant")!;
-
-    ventaActual = ventaActuals!;
-    //ventaActual.cantidad = parseInt(cantidades!);
-    setVentas([...ventas, ventaActual]);
-    setOpen3(false);
-  }
 
   return (
     <>
@@ -363,7 +352,7 @@ export default function FiltroCotizacion() {
       >
         {(formikProps) => (
           <>
-            <Form>
+            <Form action="VistaCotizacion.tsx" method="post">
               <div
                 className="containerr"
                 style={{ backgroundColor: "#E0E0E0" }}
@@ -377,9 +366,8 @@ export default function FiltroCotizacion() {
                     <input
                       type="text"
                       className="form-control"
-                      id="nombre"
+                      id="idCotizaciones"
                       style={{ width: "230px" }}
-                      placeholder="Nombre de la cotizacion"
                     />
                   </div>
                   <div className="vendedor">
@@ -505,9 +493,9 @@ export default function FiltroCotizacion() {
                     ></input>
                   </div>
 
-                  <div className="tienda" style={{ width: "220px" }}>
+                  <div className="tienda" style={{ width: "220px" }} >
                     <div style={{ width: "100px" }}>Tienda:</div>
-                    <select className="form-control">
+                    <select className="form-control" id="idTienda">
                       <option value="0">MATRIZ</option>
                       <option value="1">SUCURSAL </option>
                     </select>
@@ -533,16 +521,15 @@ export default function FiltroCotizacion() {
                     <input
                       type="text"
                       className="form-control"
-                      id="nombre"
+                      id="idObservaciones"
                       placeholder=""
-                      {...formikProps.getFieldProps("nombre")}
+                      {...formikProps.getFieldProps("observaciones")}
                       style={{ width: "900px" }}
                     />
                   </div>
                   <div className="pre">Precio2:</div>
                   <div className="fecha" style={{ width: "200px" }}>
                     Fecha:
-                    {/*today.toString()*/}
                     {año}
                   </div>
                 </div>
@@ -550,7 +537,7 @@ export default function FiltroCotizacion() {
                 <div className="roww">
                   <div className="probabilidadVenta" style={{ width: "400px" }}>
                     <div style={{ width: "220px" }}>Probabilidad Venta</div>
-                    <select className="form-control">
+                    <select className="form-control" id="idProbabilidadVenta">
                       <option value="0">Muy Baja</option>
                       <option value="1">Baja</option>
                       <option value="2">Normal</option>
@@ -559,7 +546,7 @@ export default function FiltroCotizacion() {
                   </div>
                   <div className="origen" style={{ width: "300px" }}>
                     <div style={{ width: "70px" }}>Origen</div>
-                    <select className="form-control">
+                    <select className="form-control" id="idOrigen">
                       <option value="0">Mostrador</option>
                       <option value="1">Cliente</option>
                       <option value="2">Administrador</option>
@@ -605,7 +592,7 @@ export default function FiltroCotizacion() {
                       onClick={handleClickOpen2}
                       style={{ color: "blue", textDecoration: "underline" }}
                     >
-                      Articulo:
+                      Articulo
                     </label>
                     <Dialog
                       open={open2}
@@ -667,9 +654,8 @@ export default function FiltroCotizacion() {
                       aria-labelledby="form-dialog-tittle2"
                       data-bs-target="#form-dialog-tittle"
                     >
-                      <DialogTitle></DialogTitle>
+                      <DialogTitle>Cantidad</DialogTitle>
                       <DialogContent>
-                        <h2>Cantidad</h2>
                         <input
                           id="cant"
                           type="text"
@@ -679,18 +665,11 @@ export default function FiltroCotizacion() {
                           placeholder="Cantidad..."
                           onKeyDown={handleKeyDown}
                         ></input>
-                        {
-                          //JAja, ahora va a ser con un ENTER en ves de renglon ;)
-                        }
                       </DialogContent>
                       <DialogActions></DialogActions>
                     </Dialog>
 
-                    <input
-                      type="text"
-                      id="tbArticulo"
-                      style={{ width: "500px" }}
-                    ></input>
+                    
                   </div>
                 </div>
               </div>
@@ -707,30 +686,109 @@ export default function FiltroCotizacion() {
                 <div className="subtotals">
                   <h1>SUBTOTAL:</h1>
                   <input
+                    value={ventas.reduce((prev, curr) => prev + curr.total, 0)}
                     type="text"
                     className="form-control"
-                    id="nombre"
+                    id="subtotal"
                     style={{ width: "220px" }}
                     placeholder="$0.00"
-                    {...formikProps.getFieldProps("nombre")}
                   />
                 </div>
               </div>
 
               <div
-                className="boton"
-                style={{ backgroundColor: "greenyellow", marginTop: "330px" }}
+                className="cotizaciones"
+                style={{ backgroundColor: "#E0E0E0", marginTop: "330px" }}
+                
               >
-                <Boton
-                  onClick={() => {
-                    formikProps.setValues(valorInicial);
-                    //buscarCotizacion(valorInicial);
+                <Button
+                  onClick={handleClickOpen4}
+                  style={{
+                    color: "blue",
+                    textDecoration: "underline",
+                    alignContent: "center",
                   }}
                 >
-                  <FontAwesomeIcon icon={faPlay} beat /> {"          "}
                   Generar (F12)
-                </Boton>
+                </Button>
+                
+                <Dialog
+                  open={open4}
+                  onClose={handleClose4}
+                  aria-labelledby="form-dialog-tittle4"
+                  data-bs-target="#form-dialog-tittle"
+                  fullScreen
+                  
+                >
+                  
+                  <DialogContent >
+                    <div className="containerInput" >
+                      <div className="modal-fullscreen">
+                      <div>
+                        <div style={{width:'98vw', textAlign:'center', fontSize:'25px'}}><label>Cotización</label></div>
+                        <img
+                          src={evolsoft}
+                          style={{
+                            width: "150px",
+                            right: "20px",
+                            marginTop: "09px",
+                          }}
+                        />
+                        <div className="idCotizacion" style={{}}><label>Cotización: </label></div>
+                        <div className="fecha1" style={{width:'98vw', textAlign:'end'}}><label>Fecha: {año}</label></div>
+                        <hr />
+                        <div className="Clientes">
+                          Cliente: {ClienteSeleccionado}
+                        </div>
+                        <hr />
+                        <div className="Vendedores">
+                          Vendedor: {VendedorSeleccionado}
+                        </div>
+                        <hr />
+                      </div>
+                      {open4 && (
+                        <div className="table-responsive" id="tabla4">
+                          <table className="table table-sm table-bordered">
+                            <thead>
+                              <tr>
+                                <th>Cantidad</th>
+                                <th>Clave</th>
+                                <th>Articulo</th>
+                                <th>Precio</th>
+                                <th>% Descuento</th>
+                                <th>$ Descuento</th>
+                                <th>Subtotal</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {ventas &&
+                                ventas.map((venta) => (
+                                  <tr key={venta.clave}>
+                                    <td>{venta.cantidad}</td>
+                                    <td>{venta.clave}</td>
+                                    <td>{venta.articulo}</td>
+                                    <td>{venta.precio}</td>
+                                    <td>{venta.porciento_descuento}</td>
+                                    <td>{venta.importe_descuento}</td>
+                                    <td>{venta.total}</td>
+                                  </tr>
+                                ))}
+                            </tbody>
+                          </table>
+                          
+                        </div>
+
+                      )}
+                      
+                     <div className="observaciones" style={{width: '50px'}}><label> Observaciones: </label></div> 
+                    </div></div>
+                    <div className="subtotal2" style={{width:'98vw', textAlign:'end', fontSize:'50px'}}>
+                      <label> Subtotal: {ventas.reduce((prev, curr) => prev + curr.total, 0)}</label>
+                    </div>
+                  </DialogContent>
+                </Dialog>
               </div>
+
               <div
                 className="casilla"
                 style={{ float: "left", width: "20%", marginTop: "350px" }}
@@ -888,8 +946,6 @@ export default function FiltroCotizacion() {
 }
 
 interface filtroCotizacionForm {
-  nombre: string;
-  //enviarCotEmail: boolean;
   pagina: number;
   recordsPorPagina: number;
   clave_usuario: vendedorDTO[];

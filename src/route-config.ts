@@ -5,6 +5,7 @@ import CrearCotizacion from "./cotizacion/CrearCotizacion";
 import EditarCotizacion from "./cotizacion/EditarCotizacion";
 import FiltroCotizacion from "./cotizacion/FiltroCotizacion";
 import DetalleCotizacion from "./cotizacion/DetalleCotizacion";
+import VistaCotizacion from "./cotizacion/VistaCotizacion";
 
 
 
@@ -27,6 +28,7 @@ const rutas = [
     {path: '/cotizacion/crear', componente: CrearCotizacion, esAutorizado:true},
     {path: '/cotizacion/editar/:id(\\d+)', componente: EditarCotizacion, esAdmin:true},
     {path: '/cotizacion/filtro', componente: FiltroCotizacion},
+    {path: '/cotizacion/vista', componente: VistaCotizacion},
 
     
     {path: '/registro', componente: Registro},

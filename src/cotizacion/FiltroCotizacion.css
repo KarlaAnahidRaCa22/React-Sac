@@ -160,7 +160,7 @@
     right: 0px;
     top: 400px
 }
-.boton{
+.cotizaciones{
     width: 28%;
     margin: 10px auto;
     display: grid;
@@ -180,3 +180,22 @@
     top: 500px
     
 }
+
+.modal-dialog-xl {
+
+    width: 50%;
+    max-width: none;
+    height: 100%;
+    margin: 0;
+  }
+  
+  .modal-content-xl {
+    height: 50%;
+    border: 0;
+    border-radius: 0;
+  }
+  
+  .modal-body-xl {
+    overflow-y: auto;
+    width: 500px;
+  }

@@ -30,7 +30,7 @@ export default function LandingPage(){
     return(
         <>
       
-                <div style={{display:'flex', alignContent:'center', backgroundColor:'gray'}}>
+                <div style={{display:'flex', alignContent:'center'}}>
                         <Autorizado 
                             autorizado={<>
                                 <Inicio />
@@ -46,7 +46,7 @@ export default function LandingPage(){
                                         Empresa
                                     </NavLink>
                                 </li>
-                                <IndiceVendedor/>
+                                
                             </>}
                             noAutorizado={<>
                                 <Login />

@@ -41,18 +41,7 @@ export default function Menu(){
                                     </NavLink>
                                 </li>
                                 
-                                        {/*<NavLink className="nav-link" activeClassName={claseActiva}
-                                    to="/Menu">
-                                        Menu
-                                    </NavLink>
-                                    
-                                        <li className="nav-item">
-                                        <NavLink className="nav-link" activeClassName={claseActiva} 
-                                        to="/cotizacion/crear">
-                                            Crear Cotizacion
-                                        </NavLink>
-                            </li>*/}
-                                
+                                        
                                 </>}/>
                                 <Autorizado
                                     autorizado={<>
@@ -62,6 +51,7 @@ export default function Menu(){
                                             Cotizaciones
                                         </NavLink>
                                     </li>
+                                    
                                     </>}
                                     noAutorizado={<>
                                     
